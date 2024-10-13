@@ -1,8 +1,8 @@
 # Welcome Editor App
-A Server App to allow Discord Servers to edit & toggle the Welcome Screen feature again.
+A Server App to allow Discord Servers to edit & toggle the [Welcome Screen feature](https://support.discord.com/hc/en-us/articles/360043913591) again.
 
 > [!IMPORTANT]
-> Since Discord favours their Server Guide feature over Welcome Screen, you will NOT be able to enable the Welcome Screen in your Server if you also have Server Guide enabled.
+> Since Discord favours their [Server Guide feature](https://support.discord.com/hc/en-us/articles/13497665141655) over Welcome Screen, you will NOT be able to enable the Welcome Screen in your Server if you also have Server Guide enabled.
 > This is a limitation/restriction on Discord's end, so if you want anyone to blame, blame them! Not this App's developer!
 
 > [!WARNING]
