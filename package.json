@@ -1,7 +1,7 @@
 {
-  "name": "discordbottemplatehttp",
+  "name": "welcomeeditor",
   "version": "1.0.0",
-  "description": "TwilightZebby's personal Discord User App Template for a HTTP-only User App",
+  "description": "A simple Server App to allow Discord Servers to edit and toggle Discord's Welcome Screen feature again.",
   "main": "index.js",
   "type": "module",
   "private": true,
@@ -28,5 +28,13 @@
   },
   "devDependencies": {
     "wrangler": "^3.78.6"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TwilightZebby/WelcomeEditor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TwilightZebby/WelcomeEditor/issues"
+  },
+  "homepage": "https://github.com/TwilightZebby/WelcomeEditor#readme"
 }

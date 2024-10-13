@@ -1,54 +1,35 @@
-A Discord App Template made by TwilightZebby for himself.
+# Welcome Editor App
+A Server App to allow Discord Servers to edit & toggle the Welcome Screen feature again.
 
-# LICENSE
-The license for this project, as well as all other projects by TwilightZebby, can be [found here](https://github.com/TwilightZebby/license/blob/main/license.md).
+> [!IMPORTANT]
+> Since Discord favours their Server Guide feature over Welcome Screen, you will NOT be able to enable the Welcome Screen in your Server if you also have Server Guide enabled.
+> This is a limitation/restriction on Discord's end, so if you want anyone to blame, blame them! Not this App's developer!
 
----
-
-# Setup Guide
-*Assumes you've already cloned this, and have NodeJS v20*
-
-1. Run `npm install` to install the dependencies defined in the `package.json` file.
-2. Ensure you have the following directories/folders - as these are where this App will look for Commands & Interactions:
-  - `./Commands/ContextCommands/`
-  - `./Commands/SlashCommands/`
-  - `./Commands/TextCommands/`
-  - `./Interactions/Buttons/`
-  - `./Interactions/Modals/`
-  - `./Interactions/Selects/`
-3. Create a `config.js` file ***in the root*** (ie: `./config.js`), with the following information (replacing strings with relevant data of course):
-
-```js
-// DO NOT LEAK TOKENS
-export const DISCORD_TOKEN = 'APP-TOKEN';
-
-/** User ID of the App this code is for - ie: the App's Bot User */
-export const DISCORD_APP_USER_ID = 'APP-BOT-USER-ID';
-
-/** User ID of the App's Developer */
-export const APP_DEVELOPER_USER_ID = 'DEVS-USER-ID';
-
-/** Prefix for classic style text-based Commands */
-export const TEXT_COMMAND_PREFIX = 'TEXT-PREFIX';
-
-/** Webhook ID for the Webhook in the above Logging Channel */
-export const LOG_WEBHOOK_ID = 'WEBHOOK-ID';
-
-/** Webhook's Token for the Webhook in the above Logginc Channel. DO NOT LEAK */
-export const LOG_WEBHOOK_TOKEN = 'WEBHOOK-TOKEN';
-```
+> [!WARNING]
+> This Server App **requires** the App to have been granted the "**Manage Server**" Permission in order to edit and/or toggle the Welcome Screen in your Server. This is just what the Welcome Screen requires (even for Users) and this App's developer has no control over that requirement. 🙃
 
 ---
 
-## Deploying Slash & Context Commands
-To make deploying Slash & Context Commands easier, a `./deployCommands.js` file is included.
+# Commands
 
-Just tweak it to your liking, and run `node deployCommands.js` to run that file ONCE.
+## `/welcome enable`
+Use to enable the Welcome Screen in your Server, allowing it to show to new Members joining your Server.
 
-> [!NOTE]
-> You do **NOT** need to keep this file running. You only need to run it ONCE to register, unregister, or edit Slash/Context Commands.
+## `/welcome disable`
+Use to disable the Welcome Screen in your Server, preventing it from showing to new Members.
+
+## `/welcome edit`
+Use to edit parts of, or all of, the Welcome Screen for your Server.
+
+This includes:
+- The description shown in the Welcome Screen
+- The Channels shown in the Welcome Screen (up to 5 maximum) and a custom description & emoji for each of them
 
 ---
 
-## Running the App
-To bring the App online, simply run `node index.js` to start up the actual App!
+# Questions
+
+## Why did you make this App?
+> Someone in the Discord Admins Server really wants Discord to un-deprecate the Welcome Screen feature and allow it to be editible/toggleable in-client again - and brought up a really good use-case/point for why when I discussed this with them.
+> 
+> Afterwards, it got me thinking and I decided to make this App for that purpose, since the Welcome Screen is still editible & toggleable via the public API. :)
