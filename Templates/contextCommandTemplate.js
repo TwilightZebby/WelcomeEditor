@@ -65,8 +65,9 @@ export const ContextCommand = {
     /** Runs the Command
      * @param {import('discord-api-types/v10').APIChatInputApplicationCommandInteraction} interaction 
      * @param {import('discord-api-types/v10').APIUser} interactionUser 
+     * @param {*} ctx Sent by Cloudflare Worker
      */
-    async executeCommand(interaction, interactionUser) {
+    async executeCommand(interaction, interactionUser, ctx) {
         return new JsonResponse({
             type: InteractionResponseType.ChannelMessageWithSource,
             data: {

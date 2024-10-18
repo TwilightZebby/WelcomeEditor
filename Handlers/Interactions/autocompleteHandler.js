@@ -10,10 +10,11 @@ import { JsonResponse } from '../../Utility/utilityMethods.js';
 /**
  * Handles & Runs Autocompletes
  * @param {import('discord-api-types/v10').APIApplicationCommandAutocompleteInteraction} interaction 
+ * @param {*} ctx Sent by Cloudflare Worker
  * 
  * @returns {JsonResponse}
  */
-export async function handleAutocomplete(interaction) {
+export async function handleAutocomplete(interaction, ctx) {
     const Command = await SlashCommands[interaction.data.name]();
 
     // If no Command found, return
@@ -36,7 +37,7 @@ export async function handleAutocomplete(interaction) {
 
 
     // Attempt to execute interaction
-    try { return await Command.SlashCommand.handleAutoComplete(interaction, interactionUser); }
+    try { return await Command.SlashCommand.handleAutoComplete(interaction, interactionUser, ctx); }
     catch (err) {
         console.error(err);
         return new JsonResponse({

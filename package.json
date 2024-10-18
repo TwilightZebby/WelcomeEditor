@@ -13,21 +13,18 @@
   "keywords": [
     "discord",
     "discord-app",
-    "discord-bot",
-    "discord-app-template",
-    "discord-bot-template",
-    "template"
+    "discord-bot"
   ],
   "author": "TwilightZebby",
   "license": "SEE LICENSE IN https://github.com/TwilightZebby/license/blob/main/license.md",
   "dependencies": {
     "@discordjs/collection": "^2.1.1",
-    "discord-api-types": "^0.37.101",
+    "discord-api-types": "^0.37.102",
     "discord-interactions": "^4.1.0",
     "itty-router": "^5.0.18"
   },
   "devDependencies": {
-    "wrangler": "^3.78.6"
+    "wrangler": "^3.81.0"
   },
   "repository": {
     "type": "git",

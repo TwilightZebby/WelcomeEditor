@@ -1,14 +1,14 @@
 import { DISCORD_APP_USER_ID, DISCORD_TOKEN } from './config.js';
 
 // SLASH COMMANDS
-import * as CoinCommand from './Commands/SlashCommands/General/coin.js';
+import * as WelcomeCommand from './Commands/SlashCommands/Management/welcome.js';
 
 /** URL used to register Interaction Commands */
 const url = `https://discord.com/api/v10/applications/${DISCORD_APP_USER_ID}/commands`;
 
 /** Array of Commands to register */
 const CommandArray = [
-    CoinCommand.SlashCommand.getRegisterData()
+    WelcomeCommand.SlashCommand.getRegisterData()
 ];
 
 const response = await fetch(url, {
@@ -23,7 +23,7 @@ const response = await fetch(url, {
 if ( response.ok ) {
     console.log(`Deployed!`);
     const data = await response.json();
-    console.log(JSON.stringify(data, null, 2));
+    //console.log(JSON.stringify(data, null, 2));
 }
 else {
     console.error(`Error deploying`);

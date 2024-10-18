@@ -30,6 +30,6 @@ This includes:
 # Questions
 
 ## Why did you make this App?
-> Someone in the Discord Admins Server really wants Discord to un-deprecate the Welcome Screen feature and allow it to be editible/toggleable in-client again - and brought up a really good use-case/point for why when I discussed this with them.
+> Someone in the [Discord Admins Server](https://dis.gd/dac-faq) really wants Discord to un-deprecate the Welcome Screen feature and allow it to be editible/toggleable in-client again - and brought up a really good use-case/point for why when I discussed this with them.
 > 
 > Afterwards, it got me thinking and I decided to make this App for that purpose, since the Welcome Screen is still editible & toggleable via the public API. :)

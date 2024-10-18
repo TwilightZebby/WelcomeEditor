@@ -22,8 +22,9 @@ export const Select = {
     /** Runs the Select
      * @param {import('discord-api-types/v10').APIMessageComponentSelectMenuInteraction} interaction 
      * @param {import('discord-api-types/v10').APIUser} interactionUser 
+     * @param {*} ctx Sent by Cloudflare Worker
      */
-    async executeSelect(interaction, interactionUser) {
+    async executeSelect(interaction, interactionUser, ctx) {
         return new JsonResponse({
             type: InteractionResponseType.ChannelMessageWithSource,
             data: {

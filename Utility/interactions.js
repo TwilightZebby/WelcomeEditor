@@ -1,5 +1,5 @@
 export const SlashCommands = {
-    'coin': () => import('../Commands/SlashCommands/General/coin.js')
+    'welcome': () => import('../Commands/SlashCommands/Management/welcome.js')
 }
 
 export const ContextCommands = {

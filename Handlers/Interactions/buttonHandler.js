@@ -11,10 +11,11 @@ import { JsonResponse } from '../../Utility/utilityMethods.js';
 /**
  * Handles & Runs Buttons
  * @param {import('discord-api-types/v10').APIMessageComponentButtonInteraction} interaction 
+ * @param {*} ctx Sent by Cloudflare Worker
  * 
  * @returns {JsonResponse}
  */
-export async function handleButton(interaction) {
+export async function handleButton(interaction, ctx) {
     // Grab button's name from Custom ID
     const ButtonName = interaction.data.custom_id.split("_").shift();
     const Button = await Buttons[ButtonName]();
@@ -116,7 +117,7 @@ export async function handleButton(interaction) {
 
 
     // Attempt to execute Interaction
-    try { return await Button.Button.executeButton(interaction, interactionUser); }
+    try { return await Button.Button.executeButton(interaction, interactionUser, ctx); }
     catch (err) {
         console.error(err);
         return new JsonResponse({

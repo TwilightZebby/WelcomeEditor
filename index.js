@@ -40,9 +40,9 @@ router.get('/', (request, env) => {
 
 // *******************************
 /** Main route for all requests sent from Discord. They will include a JSON payload */
-router.post('/', async (request, env) => {
+router.post('/', async (request, env, ctx) => {
     // Verify request
-    const { isValid, interaction } = await server.verifyDiscordRequest(request, env);
+    const { isValid, interaction } = await server.verifyDiscordRequest(request, env, ctx);
     
     if ( !isValid || !interaction ) {
         return new Response('Bad request signature.', { status: 401 });
@@ -56,22 +56,22 @@ router.post('/', async (request, env) => {
 
     // Now split off & handle each Interaction type
     if ( isChatInputApplicationCommandInteraction(interaction) ) {
-        return await handleSlashCommand(interaction);
+        return await handleSlashCommand(interaction, ctx);
     }
     else if ( isContextMenuApplicationCommandInteraction(interaction) ) {
-        return await handleContextCommand(interaction);
+        return await handleContextCommand(interaction, ctx);
     }
     else if ( isMessageComponentButtonInteraction(interaction) ) {
-        return await handleButton(interaction);
+        return await handleButton(interaction, ctx);
     }
     else if ( isMessageComponentSelectMenuInteraction(interaction) ) {
-        return await handleSelect(interaction);
+        return await handleSelect(interaction, ctx);
     }
     else if ( interaction.type === InteractionType.ApplicationCommandAutocomplete ) {
-        return await handleAutocomplete(interaction);
+        return await handleAutocomplete(interaction, ctx);
     }
     else if ( interaction.type === InteractionType.ModalSubmit ) {
-        return await handleModal(interaction);
+        return await handleModal(interaction, ctx);
     }
     else {
         console.info(`****Unrecognised or new unhandled Interaction Type triggered: ${interaction.type}`);
@@ -90,7 +90,7 @@ router.all('*', () => new Response('Not Found.', { status: 400 }));
 
 
 // *******************************
-async function verifyDiscordRequest(request, env) {
+async function verifyDiscordRequest(request, env, ctx) {
     const signature = request.headers.get('x-signature-ed25519');
     const timestamp = request.headers.get('x-signature-timestamp');
     const body = await request.text();

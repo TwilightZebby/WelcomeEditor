@@ -22,8 +22,9 @@ export const Button = {
     /** Runs the Button
      * @param {import('discord-api-types/v10').APIMessageComponentButtonInteraction} interaction 
      * @param {import('discord-api-types/v10').APIUser} interactionUser 
+     * @param {*} ctx Sent by Cloudflare Worker
      */
-    async executeButton(interaction, interactionUser) {
+    async executeButton(interaction, interactionUser, ctx) {
         return new JsonResponse({
             type: InteractionResponseType.ChannelMessageWithSource,
             data: {
