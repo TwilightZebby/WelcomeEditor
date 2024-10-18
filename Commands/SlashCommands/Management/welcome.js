@@ -141,9 +141,6 @@ export const SlashCommand = {
  * @param {import('discord-api-types/v10').APIUser} interactionUser 
  */
 async function enableWelcome(interaction, interactionUser) {
-    // Force-wait a second, just in case this tries to respond BEFORE the initial Defer above
-    
-
     // Check App *does* have MANAGE_GUILD Permission first!
     let appPerms = BigInt(interaction.app_permissions);
 
@@ -159,7 +156,8 @@ async function enableWelcome(interaction, interactionUser) {
             method: 'PATCH',
             body: JSON.stringify(responseBody)
         });
-
+        /* .then(console.log)
+        .catch(console.error); */
         return;
     }
 
