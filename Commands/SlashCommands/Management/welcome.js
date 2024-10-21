@@ -144,7 +144,7 @@ async function enableWelcome(interaction, interactionUser) {
     // Check App *does* have MANAGE_GUILD Permission first!
     let appPerms = BigInt(interaction.app_permissions);
 
-    if ( !((appPerms & PermissionFlagsBits.ManageGuild) == PermissionFlagsBits.ManageGuild) ) {
+    /* if ( !((appPerms & PermissionFlagsBits.ManageGuild) == PermissionFlagsBits.ManageGuild) ) {
         let responseURI = UriEditOriginalInteraction(interaction.token);
         let responseBody = {
             data: {
@@ -156,14 +156,12 @@ async function enableWelcome(interaction, interactionUser) {
             method: 'PATCH',
             body: JSON.stringify(responseBody)
         });
-        /* .then(console.log)
-        .catch(console.error); */
-        return;
-    }
+        return responseBody;
+    } */
 
 
     // Check to see if Welcome Screen is already enabled
-    let fetchedGuildRaw = await fetch(`https://discord.com/api/v10/guilds/${interaction.guild_id}`, {
+    /* let fetchedGuildRaw = await fetch(`https://discord.com/api/v10/guilds/${interaction.guild_id}`, {
         headers: InteractionResponseHeaders,
         method: 'GET'
     });
@@ -184,7 +182,7 @@ async function enableWelcome(interaction, interactionUser) {
         });
 
         return;
-    }
+    } */
 
     let responseURI = UriEditOriginalInteraction(interaction.token);
     let responseBody = {
