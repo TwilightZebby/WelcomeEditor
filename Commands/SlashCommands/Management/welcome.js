@@ -185,6 +185,18 @@ async function enableWelcome(interaction, interactionUser) {
 
         return;
     }
+
+    let responseURI = UriEditOriginalInteraction(interaction.token);
+    let responseBody = {
+        data: {
+            content: "TEST"
+        }
+    };
+    await fetch(responseURI, {
+        headers: InteractionResponseHeaders,
+        method: 'PATCH',
+        body: responseBody
+    });
 }
 
 
