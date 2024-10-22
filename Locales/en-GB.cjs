@@ -60,21 +60,9 @@ module.exports = {
 
 
 
-    // ******* WELCOME COMMAND
+    // ******* MAIN WELCOME COMMANDS
     WELCOME_COMMAND_ENABLE_SUCCESS: `Successfully enabled the Welcome Screen for this Server.\n\nNew Members to this Server will now be shown it when joining.`,
     WELCOME_COMMAND_DISABLE_SUCCESS: `Successfully disabled the Welcome Screen for this Server.\n\nNew Members to this Server will no longer be shown it when joining.`,
-
-    WELCOME_COMMAND_EDIT_INSTRUCTIONS: `## __Editing Welcome Screen__\nBelow is a preview of your Welcome Screen's data. It will auto-update with your pending changes as you make them.\nUse the Select Menu below the preview to choose which parts of the Welcome Screen you want to edit.\n\n-# Can't see the preview? Make sure you have embeds enabled in **User Settings -> Chat -> "Show embeds and preview website links"**`,
-    WELCOME_COMMAND_EDIT_EMBED_PLACEHOLDER: `-# Welcome Screen is currently empty`,
-    WELCOME_COMMAND_EDIT_EMBED_CHANNELS_HEADER: `Channels on Welcome Screen:`,
-    
-    WELCOME_COMMAND_EDIT_SELECT_PLACEHOLDER: `Please select an action`,
-    WELCOME_COMMAND_EDIT_SELECT_EDIT_DESCRIPTION: `Edit Welcome's Description`,
-    WELCOME_COMMAND_EDIT_SELECT_ADD_CHANNEL: `Add Channel to Welcome`,
-    WELCOME_COMMAND_EDIT_SELECT_EDIT_CHANNEL: `Edit a listed Channel`,
-    WELCOME_COMMAND_EDIT_SELECT_REMOVE_CHANNEL: `Remove Channel from Welcome`,
-    WELCOME_COMMAND_EDIT_SELECT_SAVE: `Save changes`,
-    WELCOME_COMMAND_EDIT_SELECT_CANCEL: `Cancel changes`,
 
     WELCOME_COMMAND_ERROR_MISSING_PERMISSION: `Sorry, I cannot toggle or edit this Server's Welcome Screen since I am missing the "**Manage Server**" Permission!\nPlease grant me this Permission, then try again.`,
     WELCOME_COMMAND_ERROR_ALREADY_ENABLED: `The Welcome Screen is already enabled for this Server!`,
@@ -88,4 +76,9 @@ module.exports = {
     WELCOME_COMMAND_ERROR_EDIT_SAVE_GENERIC: `Sorry, something went wrong while trying to save your changes to the Welcome Screen.`,
     WELCOME_COMMAND_ERROR_EDIT_FETCH_GENERIC: `Sorry, something went wrong while trying to fetch this Server's current Welcome Screen data.`,
     WELCOME_COMMAND_ERROR_EDIT_GENERIC: `Sorry, something went wrong while while processing this Command.`,
+
+
+
+    // ******* WELCOME SCREEN EDITING COMMANDS
+    //.
 }

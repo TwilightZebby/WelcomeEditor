@@ -23,7 +23,6 @@ const response = await fetch(url, {
 if ( response.ok ) {
     console.log(`Deployed!`);
     const data = await response.json();
-    //console.log(JSON.stringify(data, null, 2));
 }
 else {
     console.error(`Error deploying`);
