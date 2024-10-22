@@ -192,6 +192,9 @@ export const SlashCommand = {
 
             case "edit":
                 return await editWelcome(interaction, interactionUser);
+
+            case "preview":
+                return await previewWelcome(interaction, interactionUser);
         }
     }
 }
@@ -400,10 +403,22 @@ async function disableWelcome(interaction, interactionUser) {
     }
 }
 
+
+
 /** Edits the Welcome Screen
  * @param {import('discord-api-types/v10').APIChatInputApplicationCommandInteraction} interaction 
  * @param {import('discord-api-types/v10').APIUser} interactionUser 
  */
 async function editWelcome(interaction, interactionUser) {
+    //.
+}
+
+
+
+/** Previews the current Welcome Screen
+ * @param {import('discord-api-types/v10').APIChatInputApplicationCommandInteraction} interaction 
+ * @param {import('discord-api-types/v10').APIUser} interactionUser 
+ */
+async function previewWelcome(interaction, interactionUser) {
     //.
 }
