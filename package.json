@@ -18,6 +18,7 @@
   "author": "TwilightZebby",
   "license": "SEE LICENSE IN https://github.com/TwilightZebby/license/blob/main/license.md",
   "dependencies": {
+    "@discordjs/builders": "^1.9.0",
     "@discordjs/collection": "^2.1.1",
     "discord-api-types": "^0.37.103",
     "discord-interactions": "^4.1.0",

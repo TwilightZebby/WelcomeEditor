@@ -1,8 +1,8 @@
 import { ApplicationCommandType, InteractionContextType, ApplicationIntegrationType, MessageFlags, InteractionResponseType, ApplicationCommandOptionType, PermissionFlagsBits } from 'discord-api-types/v10';
+import { ActionRowBuilder, EmbedBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from '@discordjs/builders';
 import { localize } from '../../../Utility/localizeResponses.js';
 import { JsonResponse } from '../../../Utility/utilityMethods.js';
-import { DISCORD_TOKEN } from '../../../config.js';
-import { InteractionResponseHeaders, UriEditOriginalInteraction, UriInteractionCallback } from '../../../Utility/utilityConstants.js';
+import { InteractionResponseHeaders } from '../../../Utility/utilityConstants.js';
 
 
 export const SlashCommand = {
@@ -327,5 +327,118 @@ async function disableWelcome(interaction, interactionUser) {
  * @param {import('discord-api-types/v10').APIUser} interactionUser 
  */
 async function editWelcome(interaction, interactionUser) {
-    //.
+    // Check App *does* have MANAGE_GUILD Permission first!
+    let appPerms = BigInt(interaction.app_permissions);
+
+    if ( !((appPerms & PermissionFlagsBits.ManageGuild) == PermissionFlagsBits.ManageGuild) ) {
+        return new JsonResponse({
+            type: InteractionResponseType.ChannelMessageWithSource,
+            data: {
+                content: localize(interaction.locale, 'WELCOME_COMMAND_ERROR_MISSING_PERMISSION'),
+                flags: MessageFlags.Ephemeral
+            }
+        });
+    }
+
+
+    // Fetch Guild Feature Flags
+    let fetchedGuildRaw = await fetch(`https://discord.com/api/v10/guilds/${interaction.guild_id}`, {
+        headers: InteractionResponseHeaders,
+        method: 'GET'
+    });
+    let fetchedGuild = await fetchedGuildRaw.json();
+
+    // Check if Guild is Community-enabled first. Welcome Screen requires Community
+    if ( !fetchedGuild["features"].includes("COMMUNITY") ) {
+        return new JsonResponse({
+            type: InteractionResponseType.ChannelMessageWithSource,
+            data: {
+                content: localize(interaction.locale, 'WELCOME_COMMAND_ERROR_GUILD_NOT_COMMUNITY'),
+                flags: MessageFlags.Ephemeral
+            }
+        });
+    }
+
+    // Ensure Server Guide is DISABLED
+    if ( fetchedGuild["features"].includes("GUILD_SERVER_GUIDE") ) {
+        return new JsonResponse({
+            type: InteractionResponseType.ChannelMessageWithSource,
+            data: {
+                content: localize(interaction.locale, 'WELCOME_COMMAND_ERROR_CANNOT_EDIT_DUE_TO_SERVER_GUIDE'),
+                flags: MessageFlags.Ephemeral
+            }
+        });
+    }
+
+
+    // Fetch Welcome Screen data
+    try {
+        let req = await fetch(`https://discord.com/api/v10/guilds/${interaction.guild_id}/welcome-screen`, {
+            method: 'GET',
+            headers: InteractionResponseHeaders
+        });
+
+        if ( req.status !== 200 ) {
+            return new JsonResponse({
+                type: InteractionResponseType.ChannelMessageWithSource,
+                data: {
+                    content: localize(interaction.locale, 'WELCOME_COMMAND_ERROR_EDIT_FETCH_GENERIC'),
+                    flags: MessageFlags.Ephemeral
+                }
+            });
+        }
+
+        // Display current Welcome Screen data via Embed, with a Select to allow editing specific parts
+        const welcomeEmbed = new EmbedBuilder().setDescription(localize(interaction.locale, 'WELCOME_COMMAND_EDIT_EMBED_PLACEHOLDER'));
+        let welcomeData = await req.json();
+        let channelStrings = [];
+        
+        if ( welcomeData["description"] != null ) { welcomeEmbed.setDescription(welcomeData["description"]); }
+
+        // Manually go through Array, just in case using `Array.from()` and `<Array>.forEach()` is what broke stuff in this HTTP/Worker App
+        if ( welcomeData["welcome_channels"].length > 0 ) {
+            if ( welcomeData["welcome_channels"][0] != undefined ) { channelStrings.push(`${welcomeData["welcome_channels"][0]["emoji_name"] != null && welcomeData["welcome_channels"][0]["emoji_id"] == null ? `${welcomeData["welcome_channels"][0]["emoji_name"]}` : welcomeData["welcome_channels"][0]["emoji_name"] != null && welcomeData["welcome_channels"][0]["emoji_id"] != null ? `<:${welcomeData["welcome_channels"][0]["emoji_name"]}:${welcomeData["welcome_channels"][0]["emoji_id"]}>` : ''} <#${welcomeData["welcome_channels"][0]["channel_id"]}>\n> ${welcomeData["welcome_channels"][0]["description"]}`); }
+            if ( welcomeData["welcome_channels"][1] != undefined ) { channelStrings.push(`${welcomeData["welcome_channels"][1]["emoji_name"] != null && welcomeData["welcome_channels"][1]["emoji_id"] == null ? `${welcomeData["welcome_channels"][1]["emoji_name"]}` : welcomeData["welcome_channels"][1]["emoji_name"] != null && welcomeData["welcome_channels"][1]["emoji_id"] != null ? `<:${welcomeData["welcome_channels"][1]["emoji_name"]}:${welcomeData["welcome_channels"][1]["emoji_id"]}>` : ''} <#${welcomeData["welcome_channels"][1]["channel_id"]}>\n> ${welcomeData["welcome_channels"][1]["description"]}`); }
+            if ( welcomeData["welcome_channels"][2] != undefined ) { channelStrings.push(`${welcomeData["welcome_channels"][2]["emoji_name"] != null && welcomeData["welcome_channels"][2]["emoji_id"] == null ? `${welcomeData["welcome_channels"][2]["emoji_name"]}` : welcomeData["welcome_channels"][2]["emoji_name"] != null && welcomeData["welcome_channels"][2]["emoji_id"] != null ? `<:${welcomeData["welcome_channels"][2]["emoji_name"]}:${welcomeData["welcome_channels"][2]["emoji_id"]}>` : ''} <#${welcomeData["welcome_channels"][2]["channel_id"]}>\n> ${welcomeData["welcome_channels"][2]["description"]}`); }
+            if ( welcomeData["welcome_channels"][3] != undefined ) { channelStrings.push(`${welcomeData["welcome_channels"][3]["emoji_name"] != null && welcomeData["welcome_channels"][3]["emoji_id"] == null ? `${welcomeData["welcome_channels"][3]["emoji_name"]}` : welcomeData["welcome_channels"][3]["emoji_name"] != null && welcomeData["welcome_channels"][3]["emoji_id"] != null ? `<:${welcomeData["welcome_channels"][3]["emoji_name"]}:${welcomeData["welcome_channels"][3]["emoji_id"]}>` : ''} <#${welcomeData["welcome_channels"][3]["channel_id"]}>\n> ${welcomeData["welcome_channels"][3]["description"]}`); }
+            if ( welcomeData["welcome_channels"][4] != undefined ) { channelStrings.push(`${welcomeData["welcome_channels"][4]["emoji_name"] != null && welcomeData["welcome_channels"][4]["emoji_id"] == null ? `${welcomeData["welcome_channels"][4]["emoji_name"]}` : welcomeData["welcome_channels"][4]["emoji_name"] != null && welcomeData["welcome_channels"][4]["emoji_id"] != null ? `<:${welcomeData["welcome_channels"][4]["emoji_name"]}:${welcomeData["welcome_channels"][4]["emoji_id"]}>` : ''} <#${welcomeData["welcome_channels"][4]["channel_id"]}>\n> ${welcomeData["welcome_channels"][4]["description"]}`); }
+
+            welcomeEmbed.addFields({ name: localize(interaction.locale, 'WELCOME_COMMAND_EDIT_EMBED_CHANNELS_HEADER'), value: channelStrings.join(`\n\n`) });
+        }
+
+        const welcomeSelect = new ActionRowBuilder().addComponents(
+            new StringSelectMenuBuilder().setCustomId(`edit`).setMaxValues(1).setMinValues(1).setPlaceholder(localize(interaction.locale, 'WELCOME_COMMAND_EDIT_SELECT_PLACEHOLDER')).addOptions([
+                new StringSelectMenuOptionBuilder().setValue(`editDescription`).setLabel(localize(interaction.locale, 'WELCOME_COMMAND_EDIT_SELECT_EDIT_DESCRIPTION')),
+                new StringSelectMenuOptionBuilder().setValue(`addChannel`).setLabel(localize(interaction.locale, 'WELCOME_COMMAND_EDIT_SELECT_ADD_CHANNEL')),
+                new StringSelectMenuOptionBuilder().setValue(`editChannel`).setLabel(localize(interaction.locale, 'WELCOME_COMMAND_EDIT_SELECT_EDIT_CHANNEL')),
+                new StringSelectMenuOptionBuilder().setValue(`removeChannel`).setLabel(localize(interaction.locale, 'WELCOME_COMMAND_EDIT_SELECT_REMOVE_CHANNEL')),
+                new StringSelectMenuOptionBuilder().setValue(`save`).setLabel(localize(interaction.locale, 'WELCOME_COMMAND_EDIT_SELECT_SAVE')),
+                new StringSelectMenuOptionBuilder().setValue(`cancel`).setLabel(localize(interaction.locale, 'WELCOME_COMMAND_EDIT_SELECT_CANCEL'))
+            ])
+        );
+
+        // Grab the JSONs of the Embed & Select ready for sending in ACK
+        let embedJson = welcomeEmbed.toJSON();
+        let selectJson = welcomeSelect.toJSON();
+
+        // ACK
+        return new JsonResponse({
+            type: InteractionResponseType.ChannelMessageWithSource,
+            data: {
+                content: localize(interaction.locale, 'WELCOME_COMMAND_EDIT_INSTRUCTIONS'),
+                embeds: [embedJson],
+                components: [selectJson],
+                flags: MessageFlags.Ephemeral
+            }
+        });
+    }
+    catch (err) {
+        return new JsonResponse({
+            type: InteractionResponseType.ChannelMessageWithSource,
+            data: {
+                content: localize(interaction.locale, 'WELCOME_COMMAND_ERROR_EDIT_GENERIC'),
+                flags: MessageFlags.Ephemeral
+            }
+        });
+    }
 }
