@@ -105,31 +105,13 @@ export const SlashCommand = {
 
         switch (InputSubcommand.name) {
             case "enable":
-                ctx.waitUntil(enableWelcome(interaction, interactionUser));
-                return new JsonResponse({
-                    type: InteractionResponseType.DeferredChannelMessageWithSource,
-                    data: {
-                        flags: MessageFlags.Ephemeral
-                    }
-                });
+                return await enableWelcome(interaction, interactionUser);
             
             case "disable":
-                ctx.waitUntil(disableWelcome(interaction, interactionUser));
-                return new JsonResponse({
-                    type: InteractionResponseType.DeferredChannelMessageWithSource,
-                    data: {
-                        flags: MessageFlags.Ephemeral
-                    }
-                });
+                return await disableWelcome(interaction, interactionUser);
 
             case "edit":
-                ctx.waitUntil(editWelcome(interaction, interactionUser));
-                return new JsonResponse({
-                    type: InteractionResponseType.DeferredChannelMessageWithSource,
-                    data: {
-                        flags: MessageFlags.Ephemeral
-                    }
-                });
+                return await editWelcome(interaction, interactionUser);
         }
     }
 }
@@ -144,57 +126,86 @@ async function enableWelcome(interaction, interactionUser) {
     // Check App *does* have MANAGE_GUILD Permission first!
     let appPerms = BigInt(interaction.app_permissions);
 
-    /* if ( !((appPerms & PermissionFlagsBits.ManageGuild) == PermissionFlagsBits.ManageGuild) ) {
-        let responseURI = UriEditOriginalInteraction(interaction.token);
-        let responseBody = {
+    if ( !((appPerms & PermissionFlagsBits.ManageGuild) == PermissionFlagsBits.ManageGuild) ) {
+        return new JsonResponse({
+            type: InteractionResponseType.ChannelMessageWithSource,
             data: {
                 content: localize(interaction.locale, 'WELCOME_COMMAND_ERROR_MISSING_PERMISSION'),
+                flags: MessageFlags.Ephemeral
             }
-        };
-        await fetch(responseURI, {
-            headers: InteractionResponseHeaders,
-            method: 'PATCH',
-            body: JSON.stringify(responseBody)
         });
-        return responseBody;
-    } */
+    }
 
 
-    // Check to see if Welcome Screen is already enabled
-    /* let fetchedGuildRaw = await fetch(`https://discord.com/api/v10/guilds/${interaction.guild_id}`, {
+    // Fetch Guild Feature Flags
+    let fetchedGuildRaw = await fetch(`https://discord.com/api/v10/guilds/${interaction.guild_id}`, {
         headers: InteractionResponseHeaders,
         method: 'GET'
     });
     let fetchedGuild = await fetchedGuildRaw.json();
 
-
-    if ( fetchedGuild["features"].includes("WELCOME_SCREEN_ENABLED") ) {
-        let responseURI = UriEditOriginalInteraction(interaction.token);
-        let responseBody = {
+    // Check if Guild is Community-enabled first. Welcome Screen requires Community to be enabled
+    if ( !fetchedGuild["features"].includes("COMMUNITY") ) {
+        return new JsonResponse({
+            type: InteractionResponseType.ChannelMessageWithSource,
             data: {
-                content: localize(interaction.locale, 'WELCOME_COMMAND_ERROR_ALREADY_ENABLED')
+                content: localize(interaction.locale, 'WELCOME_COMMAND_ERROR_GUILD_NOT_COMMUNITY'),
+                flags: MessageFlags.Ephemeral
             }
-        };
-        await fetch(responseURI, {
-            headers: InteractionResponseHeaders,
-            method: 'PATCH',
-            body: responseBody
         });
+    }
 
-        return;
-    } */
+    // Ensure Welcome Screen is not already enabled
+    if ( fetchedGuild["features"].includes("WELCOME_SCREEN_ENABLED") ) {
+        return new JsonResponse({
+            type: InteractionResponseType.ChannelMessageWithSource,
+            data: {
+                content: localize(interaction.locale, 'WELCOME_COMMAND_ERROR_ALREADY_ENABLED'),
+                flags: MessageFlags.Ephemeral
+            }
+        });
+    }
 
-    let responseURI = UriEditOriginalInteraction(interaction.token);
-    let responseBody = {
-        data: {
-            content: "TEST"
-        }
-    };
-    await fetch(responseURI, {
-        headers: InteractionResponseHeaders,
-        method: 'PATCH',
-        body: responseBody
-    });
+    // Ensure Server Guide is DISABLED
+    if ( fetchedGuild["features"].includes("GUILD_SERVER_GUIDE") ) {
+        return new JsonResponse({
+            type: InteractionResponseType.ChannelMessageWithSource,
+            data: {
+                content: localize(interaction.locale, 'WELCOME_COMMAND_ERROR_CANNOT_ENABLE_DUE_TO_SERVER_GUIDE'),
+                flags: MessageFlags.Ephemeral
+            }
+        });
+    }
+
+
+    // Enable Welcome Screen!
+    try {
+        await fetch(`https://discord.com/api/v10/guilds/${interaction.guild_id}/welcome-screen`, {
+            method: 'PATCH',
+            headers: InteractionResponseHeaders,
+            body: JSON.stringify({
+                enabled: true
+            })
+        })
+        .then(async () => {
+            return new JsonResponse({
+                type: InteractionResponseType.ChannelMessageWithSource,
+                data: {
+                    content: localize(interaction.locale, 'WELCOME_COMMAND_ENABLE_SUCCESS'),
+                    flags: MessageFlags.Ephemeral
+                }
+            });
+        });
+    }
+    catch (err) {
+        return new JsonResponse({
+            type: InteractionResponseType.ChannelMessageWithSource,
+            data: {
+                content: localize(interaction.locale, 'WELCOME_COMMAND_ERROR_ENABLE_GENERIC', `\`\`\`${err.name}: ${err.message}\`\`\``),
+                flags: MessageFlags.Ephemeral
+            }
+        });
+    }
 }
 
 
