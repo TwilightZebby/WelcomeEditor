@@ -70,7 +70,7 @@ module.exports = {
     WELCOME_COMMAND_ERROR_CANNOT_ENABLE_DUE_TO_SERVER_GUIDE: `Sorry, the Welcome Screen cannot be enabled while Server Guide is enabled.\nThis is a restriction imposed by Discord themselves. If you want to enable Welcome Screen, please disable Server Guide first via **Server Settings -> Onboarding**.`,
     WELCOME_COMMAND_ERROR_CANNOT_DISABLE_DUE_TO_SERVER_GUIDE: `The Welcome Screen is already force-disabled by Discord since Server Guide is enabled in this Server!`,
     WELCOME_COMMAND_ERROR_GUILD_NOT_COMMUNITY: `Sorry, I cannot edit or toggle the Welcome Screen here since this Server is not Community-enabled.\nIf you want to make use of the Welcome Screen, please get the Server Owner (or someone with the **Admin** Permission) to enable Community within Server Settings.`,
-    WELCOME_COMMAND_ERROR_ENABLE_GENERIC: `Sorry, something went wrong while trying to enable the Welcome Screen for this Server. A preview of the raw error is attached:\n\n{{0}}`,
-    WELCOME_COMMAND_ERROR_DISABLE_GENERIC: `Sorry, something went wrong while trying to disable the Welcome Screen for this Server. A preview of the raw error is attached:\n\n{{0}}`,
-    WELCOME_COMMAND_ERROR_EDIT_GENERIC: `Sorry, something went wrong while trying to save your changes to the Welcome Screen. A preview of the raw error is attached:\n\n{{0}}`,
+    WELCOME_COMMAND_ERROR_ENABLE_GENERIC: `Sorry, something went wrong while trying to enable the Welcome Screen for this Server.`,
+    WELCOME_COMMAND_ERROR_DISABLE_GENERIC: `Sorry, something went wrong while trying to disable the Welcome Screen for this Server.`,
+    WELCOME_COMMAND_ERROR_EDIT_GENERIC: `Sorry, something went wrong while trying to save your changes to the Welcome Screen.`,
 }

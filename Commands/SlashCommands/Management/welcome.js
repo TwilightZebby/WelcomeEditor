@@ -180,14 +180,15 @@ async function enableWelcome(interaction, interactionUser) {
 
     // Enable Welcome Screen!
     try {
-        await fetch(`https://discord.com/api/v10/guilds/${interaction.guild_id}/welcome-screen`, {
+        let req = await fetch(`https://discord.com/api/v10/guilds/${interaction.guild_id}/welcome-screen`, {
             method: 'PATCH',
             headers: InteractionResponseHeaders,
             body: JSON.stringify({
                 enabled: true
             })
-        })
-        .then(async () => {
+        });
+        
+        if ( req.status === 200 ) {
             return new JsonResponse({
                 type: InteractionResponseType.ChannelMessageWithSource,
                 data: {
@@ -195,13 +196,22 @@ async function enableWelcome(interaction, interactionUser) {
                     flags: MessageFlags.Ephemeral
                 }
             });
-        });
+        }
+        else {
+            return new JsonResponse({
+                type: InteractionResponseType.ChannelMessageWithSource,
+                data: {
+                    content: localize(interaction.locale, 'WELCOME_COMMAND_ERROR_ENABLE_GENERIC'),
+                    flags: MessageFlags.Ephemeral
+                }
+            });
+        }
     }
     catch (err) {
         return new JsonResponse({
             type: InteractionResponseType.ChannelMessageWithSource,
             data: {
-                content: localize(interaction.locale, 'WELCOME_COMMAND_ERROR_ENABLE_GENERIC', `\`\`\`${err.name}: ${err.message}\`\`\``),
+                content: localize(interaction.locale, 'WELCOME_COMMAND_ERROR_ENABLE_GENERIC'),
                 flags: MessageFlags.Ephemeral
             }
         });
@@ -215,7 +225,99 @@ async function enableWelcome(interaction, interactionUser) {
  * @param {import('discord-api-types/v10').APIUser} interactionUser 
  */
 async function disableWelcome(interaction, interactionUser) {
-    //.
+    // Check App *does* have MANAGE_GUILD Permission first!
+    let appPerms = BigInt(interaction.app_permissions);
+
+    if ( !((appPerms & PermissionFlagsBits.ManageGuild) == PermissionFlagsBits.ManageGuild) ) {
+        return new JsonResponse({
+            type: InteractionResponseType.ChannelMessageWithSource,
+            data: {
+                content: localize(interaction.locale, 'WELCOME_COMMAND_ERROR_MISSING_PERMISSION'),
+                flags: MessageFlags.Ephemeral
+            }
+        });
+    }
+
+
+    // Fetch Guild Feature Flags
+    let fetchedGuildRaw = await fetch(`https://discord.com/api/v10/guilds/${interaction.guild_id}`, {
+        headers: InteractionResponseHeaders,
+        method: 'GET'
+    });
+    let fetchedGuild = await fetchedGuildRaw.json();
+
+    // Check if Guild is Community-enabled first. Welcome Screen requires Community
+    if ( !fetchedGuild["features"].includes("COMMUNITY") ) {
+        return new JsonResponse({
+            type: InteractionResponseType.ChannelMessageWithSource,
+            data: {
+                content: localize(interaction.locale, 'WELCOME_COMMAND_ERROR_GUILD_NOT_COMMUNITY'),
+                flags: MessageFlags.Ephemeral
+            }
+        });
+    }
+
+    // Ensure Welcome Screen is not already disabled
+    if ( !fetchedGuild["features"].includes("WELCOME_SCREEN_ENABLED") ) {
+        return new JsonResponse({
+            type: InteractionResponseType.ChannelMessageWithSource,
+            data: {
+                content: localize(interaction.locale, 'WELCOME_COMMAND_ERROR_ALREADY_DISABLED'),
+                flags: MessageFlags.Ephemeral
+            }
+        });
+    }
+
+    // Ensure Server Guide is DISABLED
+    if ( fetchedGuild["features"].includes("GUILD_SERVER_GUIDE") ) {
+        return new JsonResponse({
+            type: InteractionResponseType.ChannelMessageWithSource,
+            data: {
+                content: localize(interaction.locale, 'WELCOME_COMMAND_ERROR_CANNOT_DISABLE_DUE_TO_SERVER_GUIDE'),
+                flags: MessageFlags.Ephemeral
+            }
+        });
+    }
+
+
+    // Disable Welcome Screen!
+    try {
+        let req = await fetch(`https://discord.com/api/v10/guilds/${interaction.guild_id}/welcome-screen`, {
+            method: 'PATCH',
+            headers: InteractionResponseHeaders,
+            body: JSON.stringify({
+                enabled: false
+            })
+        });
+
+        if ( req.status === 200 ) {
+            return new JsonResponse({
+                type: InteractionResponseType.ChannelMessageWithSource,
+                data: {
+                    content: localize(interaction.locale, 'WELCOME_COMMAND_DISABLE_SUCCESS'),
+                    flags: MessageFlags.Ephemeral
+                }
+            });
+        }
+        else {
+            return new JsonResponse({
+                type: InteractionResponseType.ChannelMessageWithSource,
+                data: {
+                    content: localize(interaction.locale, 'WELCOME_COMMAND_ERROR_DISABLE_GENERIC'),
+                    flags: MessageFlags.Ephemeral
+                }
+            });
+        }
+    }
+    catch (err) {
+        return new JsonResponse({
+            type: InteractionResponseType.ChannelMessageWithSource,
+            data: {
+                content: localize(interaction.locale, 'WELCOME_COMMAND_ERROR_DISABLE_GENERIC'),
+                flags: MessageFlags.Ephemeral
+            }
+        });
+    }
 }
 
 
