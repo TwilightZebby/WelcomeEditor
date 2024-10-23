@@ -38,7 +38,12 @@ export const SlashCommand = {
     subcommandCooldown: {
         "welcome_enable": 10,
         "welcome_disable": 10,
-        "welcome_edit": 20
+        "welcome_edit": 20,
+        "welcome_edit_description": 20,
+        "welcome_edit_add-channel": 20,
+        "welcome_edit_edit-channel": 20,
+        "welcome_edit_remove-channel": 20,
+        "welcome_preview": 20
     },
     
 
@@ -200,19 +205,74 @@ export const SlashCommand = {
         else if ( InputEditGroup != undefined ) {
             // Grab which Subcommand of this Command Group was used
             const InputEditSubcommand = InputEditGroup.options.find(option => option.type === ApplicationCommandOptionType.Subcommand);
+
+            // Simplify/De-dupe code
+
+            // Permission check
+            // Check App *does* have MANAGE_GUILD Permission first!
+            let appPerms = BigInt(interaction.app_permissions);
+
+            if ( !((appPerms & PermissionFlagsBits.ManageGuild) == PermissionFlagsBits.ManageGuild) ) {
+                return new JsonResponse({
+                    type: InteractionResponseType.ChannelMessageWithSource,
+                    data: {
+                        content: localize(interaction.locale, 'WELCOME_COMMAND_ERROR_MISSING_PERMISSION'),
+                        flags: MessageFlags.Ephemeral
+                    }
+                });
+            }
+
+
+            // Check if Welcome Screen *can* be edited
+            let fetchedGuildRaw = await fetch(`https://discord.com/api/v10/guilds/${interaction.guild_id}`, {
+                headers: InteractionResponseHeaders,
+                method: 'GET'
+            });
+            let fetchedGuild = await fetchedGuildRaw.json();
+        
+            // Check if Guild is Community-enabled first. Welcome Screen requires Community to be enabled
+            if ( !fetchedGuild["features"].includes("COMMUNITY") ) {
+                return new JsonResponse({
+                    type: InteractionResponseType.ChannelMessageWithSource,
+                    data: {
+                        content: localize(interaction.locale, 'WELCOME_COMMAND_ERROR_GUILD_NOT_COMMUNITY'),
+                        flags: MessageFlags.Ephemeral
+                    }
+                });
+            }
+
+            // Ensure Server Guide is DISABLED
+            if ( fetchedGuild["features"].includes("GUILD_SERVER_GUIDE") ) {
+                return new JsonResponse({
+                    type: InteractionResponseType.ChannelMessageWithSource,
+                    data: {
+                        content: localize(interaction.locale, 'WELCOME_COMMAND_ERROR_CANNOT_EDIT_DUE_TO_SERVER_GUIDE'),
+                        flags: MessageFlags.Ephemeral
+                    }
+                });
+            }
+
+
+            // Fetch current Welcome Screen
+            let welcomeRequest = await fetch(`https://discord.com/api/v10/guilds/${interaction.guild_id}/welcome-screen`, {
+                method: 'GET',
+                headers: InteractionResponseHeaders
+            });
+            let welcomeData = await welcomeRequest.json();
+
             
             switch (InputEditSubcommand.name) {
                 case "description":
-                    return await editDescription(interaction, InputEditSubcommand);
+                    return await editDescription(interaction, InputEditSubcommand, welcomeData);
             
                 case "add-channel":
-                    return await disableWelcome(interaction, InputEditSubcommand);
+                    return await addChannel(interaction, InputEditSubcommand, welcomeData);
 
                 case "edit-channel":
-                    return await previewWelcome(interaction, InputEditSubcommand);
+                    return await editChannel(interaction, InputEditSubcommand, welcomeData);
 
                 case "remove-channel":
-                    return await previewWelcome(interaction, InputEditSubcommand);
+                    return await removeChannel(interaction, InputEditSubcommand, welcomeData);
             }
         }
     }
@@ -521,9 +581,40 @@ async function previewWelcome(interaction, interactionUser) {
 /** Edits the Welcome Screen's description
  * @param {import('discord-api-types/v10').APIChatInputApplicationCommandInteraction} interaction 
  * @param {import('discord-api-types/v10').APIApplicationCommandInteractionDataSubcommandOption} subcommand 
+ * @param {*} welcomeData API Welcome Screen data
  */
-async function editDescription(interaction, subcommand) {
-    //.
+async function editDescription(interaction, subcommand, welcomeData) {
+    // Grab input
+    const InputDescription = subcommand.options.find(option => option.type === ApplicationCommandOptionType.String);
+    let requestBody = JSON.stringify({ description: InputDescription.value });
+
+    // Send patch
+    let patchRequest = await fetch(`https://discord.com/api/v10/guilds/${interaction.guild_id}/welcome-screen`, {
+        method: 'PATCH',
+        headers: InteractionResponseHeaders,
+        body: requestBody
+    });
+
+    if ( patchRequest.status != 200 ) {
+        return new JsonResponse({
+            type: InteractionResponseType.ChannelMessageWithSource,
+            data: {
+                content: localize(interaction.locale, 'WELCOME_EDIT_DESCRIPTION_ERROR_GENERIC'),
+                flags: MessageFlags.Ephemeral
+            }
+        });
+    }
+    else {
+        let oldDescription = welcomeData["description"] == null ? " " : welcomeData["description"];
+
+        return new JsonResponse({
+            type: InteractionResponseType.ChannelMessageWithSource,
+            data: {
+                content: localize(interaction.locale, 'WELCOME_EDIT_DESCRIPTION_SUCCESS', oldDescription, InputDescription.value),
+                flags: MessageFlags.Ephemeral
+            }
+        });
+    }
 }
 
 
@@ -531,8 +622,9 @@ async function editDescription(interaction, subcommand) {
 /** Add a Channel to the Welcome Screen
  * @param {import('discord-api-types/v10').APIChatInputApplicationCommandInteraction} interaction 
  * @param {import('discord-api-types/v10').APIApplicationCommandInteractionDataSubcommandOption} subcommand 
+ * @param {*} welcomeData API Welcome Screen data
  */
-async function addChannel(interaction, subcommand) {
+async function addChannel(interaction, subcommand, welcomeData) {
     //.
 }
 
@@ -541,8 +633,9 @@ async function addChannel(interaction, subcommand) {
 /** Edits an existing Channel listing on the Welcome Screen
  * @param {import('discord-api-types/v10').APIChatInputApplicationCommandInteraction} interaction 
  * @param {import('discord-api-types/v10').APIApplicationCommandInteractionDataSubcommandOption} subcommand 
+ * @param {*} welcomeData API Welcome Screen data
  */
-async function editChannel(interaction, subcommand) {
+async function editChannel(interaction, subcommand, welcomeData) {
     //.
 }
 
@@ -551,7 +644,8 @@ async function editChannel(interaction, subcommand) {
 /** Removes a Channel from the Welcome Screen
  * @param {import('discord-api-types/v10').APIChatInputApplicationCommandInteraction} interaction 
  * @param {import('discord-api-types/v10').APIApplicationCommandInteractionDataSubcommandOption} subcommand 
+ * @param {*} welcomeData API Welcome Screen data
  */
-async function removeChannel(interaction, subcommand) {
+async function removeChannel(interaction, subcommand, welcomeData) {
     //.
 }
