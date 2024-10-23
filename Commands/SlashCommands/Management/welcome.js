@@ -117,7 +117,7 @@ export const SlashCommand = {
                             name: "label",
                             description: "A new label or description for the selected Channel",
                             max_length: 50,
-                            required: true
+                            required: false
                         }, {
                             type: ApplicationCommandOptionType.String,
                             name: "emoji",
@@ -182,19 +182,38 @@ export const SlashCommand = {
     async executeCommand(interaction, interactionUser, usedCommandName, ctx) {
         // See what Subcommand was used
         const InputSubcommand = interaction.data.options.find(option => option.type === ApplicationCommandOptionType.Subcommand);
+        const InputEditGroup = interaction.data.options.find(option => option.type === ApplicationCommandOptionType.SubcommandGroup);
 
-        switch (InputSubcommand.name) {
-            case "enable":
-                return await enableWelcome(interaction, interactionUser);
+        if ( InputSubcommand != undefined )
+        {
+            switch (InputSubcommand.name) {
+                case "enable":
+                    return await enableWelcome(interaction, interactionUser);
             
-            case "disable":
-                return await disableWelcome(interaction, interactionUser);
+                case "disable":
+                    return await disableWelcome(interaction, interactionUser);
 
-            case "edit":
-                return await editWelcome(interaction, interactionUser);
+                case "preview":
+                    return await previewWelcome(interaction, interactionUser);
+            }
+        }
+        else if ( InputEditGroup != undefined ) {
+            // Grab which Subcommand of this Command Group was used
+            const InputEditSubcommand = InputEditGroup.options.find(option => option.type === ApplicationCommandOptionType.Subcommand);
+            
+            switch (InputEditSubcommand.name) {
+                case "description":
+                    return await editDescription(interaction, InputEditSubcommand);
+            
+                case "add-channel":
+                    return await disableWelcome(interaction, InputEditSubcommand);
 
-            case "preview":
-                return await previewWelcome(interaction, interactionUser);
+                case "edit-channel":
+                    return await previewWelcome(interaction, InputEditSubcommand);
+
+                case "remove-channel":
+                    return await previewWelcome(interaction, InputEditSubcommand);
+            }
         }
     }
 }
@@ -405,20 +424,134 @@ async function disableWelcome(interaction, interactionUser) {
 
 
 
-/** Edits the Welcome Screen
- * @param {import('discord-api-types/v10').APIChatInputApplicationCommandInteraction} interaction 
- * @param {import('discord-api-types/v10').APIUser} interactionUser 
- */
-async function editWelcome(interaction, interactionUser) {
-    //.
-}
-
-
-
 /** Previews the current Welcome Screen
  * @param {import('discord-api-types/v10').APIChatInputApplicationCommandInteraction} interaction 
  * @param {import('discord-api-types/v10').APIUser} interactionUser 
  */
 async function previewWelcome(interaction, interactionUser) {
+    // Check App *does* have MANAGE_GUILD Permission first!
+    let appPerms = BigInt(interaction.app_permissions);
+
+    if ( !((appPerms & PermissionFlagsBits.ManageGuild) == PermissionFlagsBits.ManageGuild) ) {
+        return new JsonResponse({
+            type: InteractionResponseType.ChannelMessageWithSource,
+            data: {
+                content: localize(interaction.locale, 'WELCOME_COMMAND_ERROR_PREVIEW_MISSING_PERMISSION'),
+                flags: MessageFlags.Ephemeral
+            }
+        });
+    }
+
+
+    // Fetch Guild Feature Flags
+    let fetchedGuildRaw = await fetch(`https://discord.com/api/v10/guilds/${interaction.guild_id}`, {
+        headers: InteractionResponseHeaders,
+        method: 'GET'
+    });
+    let fetchedGuild = await fetchedGuildRaw.json();
+
+    // Check if Guild is Community-enabled first. Welcome Screen requires Community
+    if ( !fetchedGuild["features"].includes("COMMUNITY") ) {
+        return new JsonResponse({
+            type: InteractionResponseType.ChannelMessageWithSource,
+            data: {
+                content: localize(interaction.locale, 'WELCOME_COMMAND_ERROR_PREVIEW_NOT_COMMUNITY'),
+                flags: MessageFlags.Ephemeral
+            }
+        });
+    }
+
+
+    // Fetch Welcome Screen data
+    let screenRequest = await fetch(`https://discord.com/api/v10/guilds/${interaction.guild_id}/welcome-screen`, {
+        method: 'GET',
+        headers: InteractionResponseHeaders
+    });
+
+    if ( screenRequest.status !== 200 ) {
+        return new JsonResponse({
+            type: InteractionResponseType.ChannelMessageWithSource,
+            data: {
+                content: localize(interaction.locale, 'WELCOME_COMMAND_ERROR_EDIT_FETCH_GENERIC'),
+                flags: MessageFlags.Ephemeral
+            }
+        });
+    }
+
+    const welcomeData = await screenRequest.json();
+    // Format into Embed for readability
+    const previewEmbed = new EmbedBuilder().setDescription(localize(interaction.locale, 'WELCOME_COMMAND_PREVIEW_EMPTY_PLACEHOLDER'));
+
+    if ( welcomeData["description"] != null ) { previewEmbed.setDescription(welcomeData["description"]); }
+    
+    if ( welcomeData["welcome_channels"].length > 0 ) {
+        let channelStringArray = [];    
+
+        welcomeData["welcome_channels"].forEach(channel => {
+            let tempEmoji = "";
+
+            // Emoji
+            if ( channel["emoji_name"] != null && channel["emoji_id"] == null ) { tempEmoji = channel["emoji_name"]; }
+            else if ( channel["emoji_name"] != null && channel["emoji_id"] != null ) { tempEmoji = `<:${channel["emoji_name"]}:${channel["emoji_id"]}>`; }
+            
+            channelStringArray.push(`${tempEmoji} <#${channel["channel_id"]}>\n> ${channel["description"]}`);
+        });
+
+        previewEmbed.addFields({ name: localize(interaction.locale, 'WELCOME_COMMAND_PREVIEW_EMBED_CHANNELS_HEADER'), value: channelStringArray.join(`\n\n`) });
+    }
+
+    // Welcome Screen enabled status
+    let welcomeScreenEnabledStatus = "";
+    if ( fetchedGuild["features"].includes("WELCOME_SCREEN_ENABLED") ) { welcomeScreenEnabledStatus = localize(interaction.locale, 'WELCOME_COMMAND_PREVIEW_ENABLED'); }
+    else { welcomeScreenEnabledStatus = localize(interaction.locale, 'WELCOME_COMMAND_PREVIEW_DISABLED'); }
+
+    // ACK
+    return new JsonResponse({
+        type: InteractionResponseType.ChannelMessageWithSource,
+        data: {
+            content: localize(interaction.locale, 'WELCOME_COMMAND_PREVIEW_INTRODUCTION', welcomeScreenEnabledStatus),
+            embeds: [previewEmbed],
+            flags: MessageFlags.Ephemeral
+        }
+    });
+}
+
+
+
+/** Edits the Welcome Screen's description
+ * @param {import('discord-api-types/v10').APIChatInputApplicationCommandInteraction} interaction 
+ * @param {import('discord-api-types/v10').APIApplicationCommandInteractionDataSubcommandOption} subcommand 
+ */
+async function editDescription(interaction, subcommand) {
+    //.
+}
+
+
+
+/** Add a Channel to the Welcome Screen
+ * @param {import('discord-api-types/v10').APIChatInputApplicationCommandInteraction} interaction 
+ * @param {import('discord-api-types/v10').APIApplicationCommandInteractionDataSubcommandOption} subcommand 
+ */
+async function addChannel(interaction, subcommand) {
+    //.
+}
+
+
+
+/** Edits an existing Channel listing on the Welcome Screen
+ * @param {import('discord-api-types/v10').APIChatInputApplicationCommandInteraction} interaction 
+ * @param {import('discord-api-types/v10').APIApplicationCommandInteractionDataSubcommandOption} subcommand 
+ */
+async function editChannel(interaction, subcommand) {
+    //.
+}
+
+
+
+/** Removes a Channel from the Welcome Screen
+ * @param {import('discord-api-types/v10').APIChatInputApplicationCommandInteraction} interaction 
+ * @param {import('discord-api-types/v10').APIApplicationCommandInteractionDataSubcommandOption} subcommand 
+ */
+async function removeChannel(interaction, subcommand) {
     //.
 }

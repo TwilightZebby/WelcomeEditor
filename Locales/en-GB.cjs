@@ -63,19 +63,31 @@ module.exports = {
     // ******* MAIN WELCOME COMMANDS
     WELCOME_COMMAND_ENABLE_SUCCESS: `Successfully enabled the Welcome Screen for this Server.\n\nNew Members to this Server will now be shown it when joining.`,
     WELCOME_COMMAND_DISABLE_SUCCESS: `Successfully disabled the Welcome Screen for this Server.\n\nNew Members to this Server will no longer be shown it when joining.`,
+    
+    WELCOME_COMMAND_PREVIEW_EMPTY_PLACEHOLDER: `-# *There is nothing in this Server's Welcome Screen...*`,
+    WELCOME_COMMAND_PREVIEW_EMBED_CHANNELS_HEADER: `Welcome Channels:`,
+    WELCOME_COMMAND_PREVIEW_INTRODUCTION: `## __Welcome Screen Preview__\nBelow is a preview of this Server's current Welcome Screen.\nYou can make changes to it using the \`/welcome edit\` Subcommands.\n\nThis Server's Welcome Screen is currently: **{{0}}**\n\n-# *Can't see the preview? Make sure you have Embeds enabled in **User Settings -> Chat -> "Show embeds and preview website links"***`,
+    WELCOME_COMMAND_PREVIEW_ENABLED: `Enabled`,
+    WELCOME_COMMAND_PREVIEW_DISABLED: `Disabled`,
 
     WELCOME_COMMAND_ERROR_MISSING_PERMISSION: `Sorry, I cannot toggle or edit this Server's Welcome Screen since I am missing the "**Manage Server**" Permission!\nPlease grant me this Permission, then try again.`,
-    WELCOME_COMMAND_ERROR_ALREADY_ENABLED: `The Welcome Screen is already enabled for this Server!`,
-    WELCOME_COMMAND_ERROR_ALREADY_DISABLED: `The Welcome Screen is already disabled for this Server!`,
-    WELCOME_COMMAND_ERROR_CANNOT_ENABLE_DUE_TO_SERVER_GUIDE: `Sorry, the Welcome Screen cannot be enabled while Server Guide is enabled.\nThis is a restriction imposed by Discord themselves. If you want to enable Welcome Screen, please disable Server Guide first via **Server Settings -> Onboarding**.`,
-    WELCOME_COMMAND_ERROR_CANNOT_DISABLE_DUE_TO_SERVER_GUIDE: `The Welcome Screen is already force-disabled by Discord since Server Guide is enabled in this Server!`,
-    WELCOME_COMMAND_ERROR_CANNOT_EDIT_DUE_TO_SERVER_GUIDE: `Sorry, the Welcome Screen cannot be edited while Server Guide is enabled.\nThis is due to how Discord made Server Guide force-disable the Welcome Screen feature when Server Guide is enabled.\nIf you want to edit the Welcome Screen, please disable Server Guide first via **Server Settings -> Onboarding**.`,
     WELCOME_COMMAND_ERROR_GUILD_NOT_COMMUNITY: `Sorry, I cannot edit or toggle the Welcome Screen here since this Server is not Community-enabled.\nIf you want to make use of the Welcome Screen, please get the Server Owner (or someone with the **Admin** Permission) to enable Community within Server Settings.`,
-    WELCOME_COMMAND_ERROR_ENABLE_GENERIC: `Sorry, something went wrong while trying to enable the Welcome Screen for this Server.`,
-    WELCOME_COMMAND_ERROR_DISABLE_GENERIC: `Sorry, something went wrong while trying to disable the Welcome Screen for this Server.`,
-    WELCOME_COMMAND_ERROR_EDIT_SAVE_GENERIC: `Sorry, something went wrong while trying to save your changes to the Welcome Screen.`,
     WELCOME_COMMAND_ERROR_EDIT_FETCH_GENERIC: `Sorry, something went wrong while trying to fetch this Server's current Welcome Screen data.`,
+
+    WELCOME_COMMAND_ERROR_ALREADY_ENABLED: `The Welcome Screen is already enabled for this Server!`,
+    WELCOME_COMMAND_ERROR_CANNOT_ENABLE_DUE_TO_SERVER_GUIDE: `Sorry, the Welcome Screen cannot be enabled while Server Guide is enabled.\nThis is a restriction imposed by Discord themselves. If you want to enable Welcome Screen, please disable Server Guide first via **Server Settings -> Onboarding**.`,
+    WELCOME_COMMAND_ERROR_ENABLE_GENERIC: `Sorry, something went wrong while trying to enable the Welcome Screen for this Server.`,
+
+    WELCOME_COMMAND_ERROR_ALREADY_DISABLED: `The Welcome Screen is already disabled for this Server!`,
+    WELCOME_COMMAND_ERROR_CANNOT_DISABLE_DUE_TO_SERVER_GUIDE: `The Welcome Screen is already force-disabled by Discord since Server Guide is enabled in this Server!`,
+    WELCOME_COMMAND_ERROR_DISABLE_GENERIC: `Sorry, something went wrong while trying to disable the Welcome Screen for this Server.`,
+    
+    WELCOME_COMMAND_ERROR_CANNOT_EDIT_DUE_TO_SERVER_GUIDE: `Sorry, the Welcome Screen cannot be edited while Server Guide is enabled.\nThis is due to how Discord made Server Guide force-disable the Welcome Screen feature when Server Guide is enabled.\nIf you want to edit the Welcome Screen, please disable Server Guide first via **Server Settings -> Onboarding**.`,
+    WELCOME_COMMAND_ERROR_EDIT_SAVE_GENERIC: `Sorry, something went wrong while trying to save your changes to the Welcome Screen.`,
     WELCOME_COMMAND_ERROR_EDIT_GENERIC: `Sorry, something went wrong while while processing this Command.`,
+
+    WELCOME_COMMAND_ERROR_PREVIEW_MISSING_PERMISSION: `Sorry, I cannot fetch this Server's current Welcome Screen data since I am missing the "**Manage Server**" Permission!\nPlease grant me this Permission, then try again.`,
+    WELCOME_COMMAND_ERROR_PREVIEW_NOT_COMMUNITY: `Sorry, I cannot fetch this Server's current Welcome Screen data as this Server is not Community-enabled.\nThe Welcome Screen requires Community to be enabled for it to exist in this Server.`,
 
 
 
