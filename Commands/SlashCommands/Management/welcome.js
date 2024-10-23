@@ -122,7 +122,7 @@ export const SlashCommand = {
                             name: "label",
                             description: "A new label or description for the selected Channel",
                             max_length: 50,
-                            required: false
+                            required: true
                         }, /* {
                             type: ApplicationCommandOptionType.String,
                             name: "emoji",
@@ -696,7 +696,56 @@ async function addChannel(interaction, subcommand, welcomeData) {
  * @param {*} welcomeData API Welcome Screen data
  */
 async function editChannel(interaction, subcommand, welcomeData) {
-    //.
+    // Grab inputs
+    const InputChannel = subcommand.options.find(option => option.type === ApplicationCommandOptionType.Channel);
+    const InputLabel = subcommand.options.find(option => option.type === ApplicationCommandOptionType.String && option.name === "label");
+
+    // Assemble into the correct Object format
+    let updatedChannel = { "channel_id": InputChannel.value, description: InputLabel.value };
+
+    // Patch into current data (reject if no Channel is found)
+    let updatedData = welcomeData["welcome_channels"];
+    let checkIndex = updatedData.findIndex(welcomeChannel => welcomeChannel["channel_id"] === InputChannel.value);
+
+    if ( checkIndex === -1 ) {
+        // The Channel wasn't found, reject
+        return new JsonResponse({
+            type: InteractionResponseType.ChannelMessageWithSource,
+            data: {
+                content: localize(interaction.locale, 'WELCOME_EDIT_EDIT_CHANNEL_ERROR_NOT_FOUND', InputChannel.value),
+                flags: MessageFlags.Ephemeral
+            }
+        });
+    }
+
+    updatedData.splice(checkIndex, 1, updatedChannel);
+    let requestBody = JSON.stringify({ "welcome_channels": updatedData });
+
+    // Send patch
+    let patchRequest = await fetch(`https://discord.com/api/v10/guilds/${interaction.guild_id}/welcome-screen`, {
+        method: 'PATCH',
+        headers: InteractionResponseHeaders,
+        body: requestBody
+    });
+
+    if ( patchRequest.status != 200 ) {
+        return new JsonResponse({
+            type: InteractionResponseType.ChannelMessageWithSource,
+            data: {
+                content: localize(interaction.locale, 'WELCOME_EDIT_EDIT_CHANNEL_ERROR_GENERIC', InputChannel.value),
+                flags: MessageFlags.Ephemeral
+            }
+        });
+    }
+    else {
+        return new JsonResponse({
+            type: InteractionResponseType.ChannelMessageWithSource,
+            data: {
+                content: localize(interaction.locale, 'WELCOME_EDIT_EDIT_CHANNEL_SUCCESS', InputChannel.value),
+                flags: MessageFlags.Ephemeral
+            }
+        });
+    }
 }
 
 

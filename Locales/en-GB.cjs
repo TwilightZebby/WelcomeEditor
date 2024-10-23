@@ -99,4 +99,8 @@ module.exports = {
     WELCOME_EDIT_ADD_CHANNEL_ERROR_DUPLICATE: `The <#{{0}}> Channel already exists on this Server's Welcome Screen!`,
     WELCOME_EDIT_ADD_CHANNEL_ERROR_GENERIC: `Sorry, an error occurred while trying to add the <#{{0}}> Channel to this Server's Welcome Screen.`,
     WELCOME_EDIT_ADD_CHANNEL_ERROR_MAXIMUM_AMOUNT_REACHED: `Sorry, you cannot add the <#{{0}}> Channel to this Server's Welcome Screen, as there are already 5 other Channels added.\n-# Welcome Screens only support a maximum of 5 Channels.`,
+
+    WELCOME_EDIT_EDIT_CHANNEL_SUCCESS: `Successfully edited the <#{{0}}> Channel's listing on this Server's Welcome Screen.`,
+    WELCOME_EDIT_EDIT_CHANNEL_ERROR_NOT_FOUND: `The <#{{0}}> Channel was not found on this Server's Welcome Screen.`,
+    WELCOME_EDIT_EDIT_CHANNEL_ERROR_GENERIC: `Sorry, an error occurred while trying to edit the <#{{0}}> Channel's listing on this Server's Welcome Screen.`,
 }
