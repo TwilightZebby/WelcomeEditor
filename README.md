@@ -31,7 +31,7 @@ Use to edit parts of, or all of, the Welcome Screen for your Server.
 
 This includes:
 - The description shown in the Welcome Screen
-- The Channels shown in the Welcome Screen (up to 5 maximum) and a custom description & emoji for each of them
+- The Channels shown in the Welcome Screen (up to 5 maximum) and a custom description <!--& emoji--> for each of them
 
 This is actually a subcommand group, allowing you to edit specific parts of the Welcome Screen using the following subcommands:
 
@@ -47,7 +47,7 @@ Add a Channel to be shown on the Welcome Screen.
 > The exact supported Channel types are: Text, [Announcement](https://support.discord.com/hc/en-us/articles/360032008192), [Forum](https://support.discord.com/hc/en-us/articles/6208479917079), and [Media](https://creator-support.discord.com/hc/en-us/articles/14346342766743).
 
 ### `/welcome edit edit-channel`
-Edit the emoji and/or label for an existing listed Channel on the Welcome Screen.
+Edit the <!--emoji and/or--> label for an existing listed Channel on the Welcome Screen.
 
 ### `/welcome edit remove-channel`
 Remove a Channel from being shown on the Welcome Screen.
