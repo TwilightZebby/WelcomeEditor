@@ -206,8 +206,6 @@ export const SlashCommand = {
             // Grab which Subcommand of this Command Group was used
             const InputEditSubcommand = InputEditGroup.options.find(option => option.type === ApplicationCommandOptionType.Subcommand);
 
-            // Simplify/De-dupe code
-
             // Permission check
             // Check App *does* have MANAGE_GUILD Permission first!
             let appPerms = BigInt(interaction.app_permissions);

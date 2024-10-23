@@ -10,6 +10,11 @@ A Server App to allow Discord Servers to edit & toggle the [Welcome Screen featu
 
 ---
 
+# Welcome Editor's Links
+You can add this Welcome Editor App to your Server by using this [Add Server App Link](https://discord.com/oauth2/authorize?client_id=1295097376712687759).
+
+---
+
 # Commands
 
 ## `/welcome enable`
@@ -55,3 +60,11 @@ Remove a Channel from being shown on the Welcome Screen.
 > Someone in the [Discord Admins Server](https://dis.gd/dac-faq) really wants Discord to un-deprecate the Welcome Screen feature and allow it to be editible/toggleable in-client again - and brought up a really good use-case/point for why when I discussed this with them.
 > 
 > Afterwards, it got me thinking and I decided to make this App for that purpose, since the Welcome Screen is still editible & toggleable via the public API. :)
+
+## Why does this App have no green online indicator for it on the Member List sidebar?
+> All HTTP-only Apps are displayed like that in Discord. It is still online and functional!
+
+## Do you have a support Server for this App?
+> Officially, no.
+> 
+> Though I guess if you have queries or support requests, you can either make a Issue/Discussion here on this GitHub repostiory, or join either of my two Servers (namely, my support Server for my HomeCord App, or my personal Server).
