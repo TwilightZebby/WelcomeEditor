@@ -93,5 +93,10 @@ module.exports = {
 
     // ******* WELCOME SCREEN EDITING COMMANDS
     WELCOME_EDIT_DESCRIPTION_SUCCESS: `Successfully updated the description of this Server's Welcome Screen.\n\n**Previously (Old):**\n\`\`\`{{0}}\`\`\`\n**Updated (New):**\n\`\`\`{{1}}\`\`\``,
-    WELCOME_EDIT_DESCRIPTION_ERROR_GENERIC: `Sorry, an error occurred while trying to save the updated description for this Server's Welcome Screen. Please try again later.`,
+    WELCOME_EDIT_DESCRIPTION_ERROR_GENERIC: `Sorry, an error occurred while trying to save the updated description for this Server's Welcome Screen.`,
+
+    WELCOME_EDIT_ADD_CHANNEL_SUCCESS: `Successfully added the <#{{0}}> Channel to this Server's Welcome Screen.`,
+    WELCOME_EDIT_ADD_CHANNEL_ERROR_DUPLICATE: `The <#{{0}}> Channel already exists on this Server's Welcome Screen!`,
+    WELCOME_EDIT_ADD_CHANNEL_ERROR_GENERIC: `Sorry, an error occurred while trying to add the <#{{0}}> Channel to this Server's Welcome Screen.`,
+    WELCOME_EDIT_ADD_CHANNEL_ERROR_MAXIMUM_AMOUNT_REACHED: `Sorry, you cannot add the <#{{0}}> Channel to this Server's Welcome Screen, as there are already 5 other Channels added.\n-# Welcome Screens only support a maximum of 5 Channels.`,
 }

@@ -99,13 +99,13 @@ export const SlashCommand = {
                             description: "A label or description for the selected Channel",
                             max_length: 50,
                             required: true
-                        }, {
+                        }, /* {
                             type: ApplicationCommandOptionType.String,
                             name: "emoji",
                             description: "[OPTIONAL] An emoji, default or custom, to be displayed with the selected Channel",
                             max_length: 100,
                             required: false
-                        }]
+                        } */]
                     },
                     {
                         type: ApplicationCommandOptionType.Subcommand,
@@ -123,13 +123,13 @@ export const SlashCommand = {
                             description: "A new label or description for the selected Channel",
                             max_length: 50,
                             required: false
-                        }, {
+                        }, /* {
                             type: ApplicationCommandOptionType.String,
                             name: "emoji",
                             description: "[OPTIONAL] A new emoji, default or custom, to be displayed with the selected Channel",
                             max_length: 100,
                             required: false
-                        }]
+                        } */]
                     },
                     {
                         type: ApplicationCommandOptionType.Subcommand,
@@ -625,7 +625,67 @@ async function editDescription(interaction, subcommand, welcomeData) {
  * @param {*} welcomeData API Welcome Screen data
  */
 async function addChannel(interaction, subcommand, welcomeData) {
-    //.
+    // Grab inputs
+    const InputChannel = subcommand.options.find(option => option.type === ApplicationCommandOptionType.Channel);
+    const InputLabel = subcommand.options.find(option => option.type === ApplicationCommandOptionType.String && option.name === "label");
+
+    // If there are already five, reject!
+    if ( welcomeData["welcome_channels"].length === 5 ) {
+        return new JsonResponse({
+            type: InteractionResponseType.ChannelMessageWithSource,
+            data: {
+                content: localize(interaction.locale, 'WELCOME_EDIT_ADD_CHANNEL_ERROR_MAXIMUM_AMOUNT_REACHED', InputChannel.value),
+                flags: MessageFlags.Ephemeral
+            }
+        });
+    }
+
+    // Assemble into the correct Object format
+    let newChannel = { "channel_id": InputChannel.value, description: InputLabel.value };
+
+    // Patch into current data (reject if duplicate is found)
+    let updatedData = welcomeData["welcome_channels"];
+    let checkIndex = updatedData.findIndex(welcomeChannel => welcomeChannel["channel_id"] === InputChannel.value);
+
+    if ( checkIndex !== -1 ) {
+        // Duplicate was found, reject!
+        return new JsonResponse({
+            type: InteractionResponseType.ChannelMessageWithSource,
+            data: {
+                content: localize(interaction.locale, 'WELCOME_EDIT_ADD_CHANNEL_ERROR_DUPLICATE', InputChannel.value),
+                flags: MessageFlags.Ephemeral
+            }
+        });
+    }
+
+    updatedData.push(newChannel);
+    let requestBody = JSON.stringify({ "welcome_channels": updatedData });
+
+    // Send patch
+    let patchRequest = await fetch(`https://discord.com/api/v10/guilds/${interaction.guild_id}/welcome-screen`, {
+        method: 'PATCH',
+        headers: InteractionResponseHeaders,
+        body: requestBody
+    });
+
+    if ( patchRequest.status != 200 ) {
+        return new JsonResponse({
+            type: InteractionResponseType.ChannelMessageWithSource,
+            data: {
+                content: localize(interaction.locale, 'WELCOME_EDIT_ADD_CHANNEL_ERROR_GENERIC', InputChannel.value),
+                flags: MessageFlags.Ephemeral
+            }
+        });
+    }
+    else {
+        return new JsonResponse({
+            type: InteractionResponseType.ChannelMessageWithSource,
+            data: {
+                content: localize(interaction.locale, 'WELCOME_EDIT_ADD_CHANNEL_SUCCESS', InputChannel.value),
+                flags: MessageFlags.Ephemeral
+            }
+        });
+    }
 }
 
 
