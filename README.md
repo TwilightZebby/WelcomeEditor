@@ -1,5 +1,5 @@
 # Welcome Editor App
-A Server App to allow Discord Servers to edit & toggle the [Welcome Screen feature](https://support.discord.com/hc/en-us/articles/360043913591) again.
+A Server App to allow Discord Servers to edit & toggle the [Welcome Screen feature](https://support.discord.com/hc/en-us/articles/360043913591) again. Hosted using CloudFlare Workers.
 
 > [!IMPORTANT]
 > Since Discord favours their [Server Guide feature](https://support.discord.com/hc/en-us/articles/13497665141655) over Welcome Screen, you will NOT be able to enable the Welcome Screen in your Server if you also have Server Guide enabled.
@@ -18,12 +18,34 @@ Use to enable the Welcome Screen in your Server, allowing it to show to new Memb
 ## `/welcome disable`
 Use to disable the Welcome Screen in your Server, preventing it from showing to new Members.
 
+## `/welcome preview`
+Use to view a preview of the current Welcome Screen setup for your Server.
+
 ## `/welcome edit`
 Use to edit parts of, or all of, the Welcome Screen for your Server.
 
 This includes:
 - The description shown in the Welcome Screen
 - The Channels shown in the Welcome Screen (up to 5 maximum) and a custom description & emoji for each of them
+
+This is actually a subcommand group, allowing you to edit specific parts of the Welcome Screen using the following subcommands:
+
+### `/welcome edit description`
+Edit the main description shown in the Welcome Screen.
+
+### `/welcome edit add-channel`
+Add a Channel to be shown on the Welcome Screen.
+
+> [!NOTE]
+> Only Text-based Channels can be added to the Welcome Screen. This is a limitation imposed by Discord themselves.
+>
+> The exact supported Channel types are: Text, [Announcement](https://support.discord.com/hc/en-us/articles/360032008192), [Forum](https://support.discord.com/hc/en-us/articles/6208479917079), and [Media](https://creator-support.discord.com/hc/en-us/articles/14346342766743).
+
+### `/welcome edit edit-channel`
+Edit the emoji and/or label for an existing listed Channel on the Welcome Screen.
+
+### `/welcome edit remove-channel`
+Remove a Channel from being shown on the Welcome Screen.
 
 ---
 
