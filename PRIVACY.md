@@ -26,7 +26,7 @@ You can see the public API Documentation regarding what the locale data includes
 
 # Final Notes
 
-The Developer of **Welcome Editor**, TwilightZebby, is contactable for matters regarding **Welcome Editor** via GitHub, preferrably via opening an Issue Ticket or Discussion on **Welcome Editor**'s [GitHub Repostiory](https://github.com/TwilightZebby/WelcomeEditor).
+The Developer of **Welcome Editor**, TwilightZebby, is contactable for matters regarding **Welcome Editor** via GitHub, preferrably via opening an Issue Ticket or Discussion on **Welcome Editor**'s [GitHub Repository](https://github.com/TwilightZebby/WelcomeEditor).
 
 Please also see [Discord's own Privacy Policy](https://discord.com/privacy).
 

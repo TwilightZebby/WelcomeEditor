@@ -1,6 +1,6 @@
 {
   "name": "welcomeeditor",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A simple Server App to allow Discord Servers to edit and toggle Discord's Welcome Screen feature again.",
   "main": "index.js",
   "type": "module",

@@ -698,9 +698,6 @@ async function editChannel(interaction, subcommand, welcomeData) {
     const InputChannel = subcommand.options.find(option => option.type === ApplicationCommandOptionType.Channel);
     const InputLabel = subcommand.options.find(option => option.type === ApplicationCommandOptionType.String && option.name === "label");
 
-    // Assemble into the correct Object format
-    let updatedChannel = { "channel_id": InputChannel.value, description: InputLabel.value };
-
     // Patch into current data (reject if no Channel is found)
     let updatedData = welcomeData["welcome_channels"];
     let checkIndex = updatedData.findIndex(welcomeChannel => welcomeChannel["channel_id"] === InputChannel.value);
@@ -716,7 +713,7 @@ async function editChannel(interaction, subcommand, welcomeData) {
         });
     }
 
-    updatedData.splice(checkIndex, 1, updatedChannel);
+    updatedData[checkIndex]["description"] = InputLabel.value;
     let requestBody = JSON.stringify({ "welcome_channels": updatedData });
 
     // Send patch
