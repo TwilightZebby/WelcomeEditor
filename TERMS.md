@@ -10,7 +10,7 @@ You may *not* use **Welcome Editor** to violate any applicable laws or regulatio
 
 ---
 
-The Developer of **Welcome Editor**, TwilightZebby, is contactable for matters regarding **Welcome Editor** via GitHub, preferrably via opening an Issue Ticket or Discussion on **Welcome Editor**'s [GitHub Repostiory](https://github.com/TwilightZebby/WelcomeEditor).
+The Developer of **Welcome Editor**, TwilightZebby, is contactable for matters regarding **Welcome Editor** via GitHub, preferrably via opening an Issue Ticket or Discussion on **Welcome Editor**'s [GitHub Repository](https://github.com/TwilightZebby/WelcomeEditor).
 
 Please also see [**Welcome Editor**'s Privacy Policy](./PRIVACY.md).
 

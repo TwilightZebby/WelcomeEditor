@@ -13,6 +13,8 @@ A Server App to allow Discord Servers to edit & toggle the [Welcome Screen featu
 # Welcome Editor's Links
 You can add this Welcome Editor App to your Server by using this [Add Server App Link](https://discord.com/oauth2/authorize?client_id=1295097376712687759).
 
+Changelog/Patch Notes are [found here](https://github.com/TwilightZebby/WelcomeEditor/releases) on the Releases page of this Repository.
+
 ---
 
 # Commands
@@ -67,4 +69,4 @@ Remove a Channel from being shown on the Welcome Screen.
 ## Do you have a support Server for this App?
 > Officially, no.
 > 
-> Though I guess if you have queries or support requests, you can either make a Issue/Discussion here on this GitHub repostiory, or join either of my two Servers (namely, my support Server for my HomeCord App, or my personal Server).
+> Though I guess if you have queries or support requests, you can either make a Issue/Discussion here on this GitHub repostiory, or join either of my two Servers (namely, my support Server for my [HomeCord App](https://homecord.gitbook.io/docs), or my personal Server).
