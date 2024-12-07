@@ -107,4 +107,16 @@ module.exports = {
     WELCOME_EDIT_REMOVE_CHANNEL_SUCCESS: `Successfully removed the <#{{0}}> Channel from this Server's Welcome Screen.`,
     WELCOME_EDIT_REMOVE_CHANNEL_ERROR_NOT_FOUND: `The <#{{0}}> Channel was not found on this Server's Welcome Screen.`,
     WELCOME_EDIT_REMOVE_CHANNEL_ERROR_GENERIC: `Sorry, an error occurred while trying to remove the <#{{0}}> Channel from this Server's Welcome Screen.`,
+
+
+
+    // ******* INVITE COMMAND
+    INVITE_COMMAND_RESPONSE: `Use the below link to add **Welcome Editor** to your Server!\n\n[Add App to Server]( {{0}} )`,
+
+
+
+    // ******* SUPPORT COMMAND
+    SUPPORT_COMMAND_RESPONSE: `Need help/support with using **Welcome Editor** App?\nFeel free to ask either in its Support Server, or on GitHub (both linked below).`,
+    SUPPORT_COMMAND_BUTTON_SERVER_LABEL: `Join Support Server`,
+    SUPPORT_COMMAND_BUTTON_GITHUB_LABEL: `Ask on GitHub`,
 }

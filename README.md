@@ -15,9 +15,17 @@ You can add this Welcome Editor App to your Server by using this [Add Server App
 
 Changelog/Patch Notes are [found here](https://github.com/TwilightZebby/WelcomeEditor/releases) on the Releases page of this Repository.
 
+If you need help/support, feel free to either ask [here on GitHub](https://github.com/TwilightZebby/WelcomeEditor/issues/new/choose), or in Welcome Editor's [Support Server](https://discord.gg/BdXQjkADgd) on Discord.
+
 ---
 
 # Commands
+
+## `/invite`
+Shows the Add App Link you can use to add Welcome Editor to your own Server.
+
+## `/support`
+Shows links for where you can gain help/support with using Welcome Editor.
 
 ## `/welcome enable`
 Use to enable the Welcome Screen in your Server, allowing it to show to new Members joining your Server.
@@ -67,6 +75,4 @@ Remove a Channel from being shown on the Welcome Screen.
 > All HTTP-only Apps are displayed like that in Discord. It is still online and functional!
 
 ## Do you have a support Server for this App?
-> Officially, no.
-> 
-> Though I guess if you have queries or support requests, you can either make a Issue/Discussion here on this GitHub repostiory, or join either of my two Servers (namely, my support Server for my [HomeCord App](https://homecord.gitbook.io/docs), or my personal Server).
+> Yes, you can find it [here with this invite link](https://discord.gg/BdXQjkADgd).
