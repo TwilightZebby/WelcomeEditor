@@ -2,13 +2,17 @@ import { DISCORD_APP_USER_ID, DISCORD_TOKEN } from './config.js';
 
 // SLASH COMMANDS
 import * as WelcomeCommand from './Commands/SlashCommands/Management/welcome.js';
+import * as InviteCommand from './Commands/SlashCommands/General/invite.js';
+import * as SupportCommand from './Commands/SlashCommands/General/support.js';
 
 /** URL used to register Interaction Commands */
 const url = `https://discord.com/api/v10/applications/${DISCORD_APP_USER_ID}/commands`;
 
 /** Array of Commands to register */
 const CommandArray = [
-    WelcomeCommand.SlashCommand.getRegisterData()
+    WelcomeCommand.SlashCommand.getRegisterData(),
+    InviteCommand.SlashCommand.getRegisterData(),
+    SupportCommand.SlashCommand.getRegisterData()
 ];
 
 const response = await fetch(url, {
