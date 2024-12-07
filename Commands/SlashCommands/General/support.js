@@ -1,5 +1,5 @@
 import { ApplicationCommandType, InteractionContextType, ApplicationIntegrationType, MessageFlags, InteractionResponseType, ButtonStyle } from 'discord-api-types/v10';
-import { JsonResponse } from '../Utility/utilityMethods.js';
+import { JsonResponse } from '../../../Utility/utilityMethods.js';
 import { ActionRowBuilder, ButtonBuilder } from '@discordjs/builders';
 import { localize } from '../../../Utility/localizeResponses.js';
 
