@@ -22,19 +22,18 @@ export async function handleAppAuthorized(webhookEvent) {
     /** @type {import('discord-api-types/v10').APIGuild | undefined} */
     let authedGuild = webhookEvent.event.data.guild;
 
-    // Fetch App's install count (DOESN'T WORK - WHY? DISCORD WHY YOU RESPOND WITH 401 HERE HELLO???)
-    /* let fetchedApp = await fetch(`https://discord.com/api/v10/applications/${DISCORD_APP_USER_ID}`, {
+    // Fetch App's install count
+    let fetchedApp = await fetch(`https://discord.com/api/v10/applications/${DISCORD_APP_USER_ID}`, {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json',
-            Authorization: `BOT ${DISCORD_TOKEN}`
+            Authorization: `Bot ${DISCORD_TOKEN}`
         }
     });
     let appData = await fetchedApp.json();
     console.log(appData);
-    let guildInstallCount = appData["approximate_guild_count"]; */
+    let guildInstallCount = appData["approximate_guild_count"];
 
-    let newAuthMessage = `## 📈 New Authorisation\nAdded as a **${appType} App** by **${authedUser.global_name != null ? authedUser.global_name : authedUser.username}** ( <@${authedUser.id}> ) to the **${authedGuild?.name}** Server (ID: ${authedGuild?.id}).\nScopes authorised for: ${authedScopes.join(' && ')}`;//\nNew total Guild Install Count: ${guildInstallCount}`;
+    let newAuthMessage = `## 📈 New Authorisation\nAdded as a **${appType} App** by **${authedUser.global_name != null ? authedUser.global_name : authedUser.username}** ( <@${authedUser.id}> ) to the **${authedGuild?.name}** Server (ID: ${authedGuild?.id}).\nScopes authorised for: ${authedScopes.join(' && ')}\nNew total Guild Install Count: ${guildInstallCount}`;
 
     // Send to Logger Webhook
     await fetch(`https://discord.com/api/v10/webhooks/${LOG_WEBHOOK_ID}/${LOG_WEBHOOK_TOKEN}`, {
@@ -46,15 +45,15 @@ export async function handleAppAuthorized(webhookEvent) {
         body: JSON.stringify({ content: newAuthMessage, allowed_mentions: { parse: [] } })
     });
 
-    // Update TopGG listing (COMMENTED OUT UNTIL I FIGURE OUT WHY I CANNOT FETCH GUILD INSTALL COUNT ABOVE)
-    /* await fetch(`https://top.gg/api/bots/1295097376712687759/stats`, {
+    // Update TopGG listing
+    await fetch(`https://top.gg/api/bots/1295097376712687759/stats`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             Authorization: `${TOPGG_TOKEN}`
         },
         body: JSON.stringify({ server_count: guildInstallCount })
-    }); */
+    });
 
     // ACK Webhook Event
     return new Response(null, { status: 204 });
