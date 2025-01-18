@@ -1,6 +1,6 @@
 # Welcome Editor - Privacy Policy
-- *Last updated: 23rd October 2024*
-- *Effective: 23rd October 2024*
+- *Last updated: 18th January 2025*
+- *Effective: 18th January 2025*
 
 ---
 
@@ -12,6 +12,18 @@ The **Welcome Editor** Server App does not, and will never, collect & store Mess
 The developer of **Welcome Editor** firmly believes in a "we don't want your data keep it away from us" process - thus, **Welcome Editor** will be developed as "stateless" as possible (i.e: without needing to store any information or data at all). If features and functions are not possible to develop "stateless", we will explicitly include them in this Privacy Policy, covering exactly what is needed to be stored, for what purpose, and how that data can be removed from **Welcome Editor** on request.
 
 **Welcome Editor**'s source code is viewable in [**Welcome Editor**'s GitHub Repo](https://github.com/TwilightZebby/WelcomeEditor).
+
+---
+
+# Logging
+**Welcome Editor** will log when it has been added (otherwise referred to as authorized) to a Discord Server.
+
+The only information included in this log are:
+- Which User added **Welcome Editor** to a Server (specifically, the User's display/user name, and ID)
+- Which Server **Welcome Editor** was added to (specifically, the Server's name & ID)
+- and which Scopes **Welcome Editor** was authorized with (commonly `application.commands` for its Slash Commands, and `bot` for its Bot User)
+
+This is purely for informational purposes (such as tracking the App's growth), and this information will NOT be given or sold to anyone else.
 
 ---
 
