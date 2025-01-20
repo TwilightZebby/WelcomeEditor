@@ -30,7 +30,6 @@ export async function handleAppAuthorized(webhookEvent) {
         }
     });
     let appData = await fetchedApp.json();
-    console.log(appData);
     let guildInstallCount = appData["approximate_guild_count"];
 
     let newAuthMessage = `## 📈 New Authorisation\nAdded as a **${appType} App** by **${authedUser.global_name != null ? authedUser.global_name : authedUser.username}** ( <@${authedUser.id}> ) to the **${authedGuild?.name}** Server (ID: ${authedGuild?.id}).\nScopes authorised for: ${authedScopes.join(' && ')}\nNew total Guild Install Count: ${guildInstallCount}`;
@@ -40,7 +39,7 @@ export async function handleAppAuthorized(webhookEvent) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `BOT ${DISCORD_TOKEN}`
+            Authorization: `Bot ${DISCORD_TOKEN}`
         },
         body: JSON.stringify({ content: newAuthMessage, allowed_mentions: { parse: [] } })
     });
