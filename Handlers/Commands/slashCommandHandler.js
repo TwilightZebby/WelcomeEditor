@@ -152,7 +152,7 @@ export async function handleSlashCommand(interaction, ctx) {
             type: InteractionResponseType.ChannelMessageWithSource,
             data: {
                 flags: MessageFlags.Ephemeral,
-                content: localize(interaction.locale, 'SLASH_COMMAND_ERROR_GENERIC', timeLeft.toFixed(1))
+                content: localize(interaction.locale, 'SLASH_COMMAND_ERROR_GENERIC')
             }
         });
     }
