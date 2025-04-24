@@ -1,6 +1,6 @@
 {
   "name": "welcomeeditor",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "A simple Server App to allow Discord Servers to edit and toggle Discord's Welcome Screen feature again.",
   "main": "index.js",
   "type": "module",
@@ -20,12 +20,12 @@
   "dependencies": {
     "@discordjs/builders": "^1.10.0",
     "@discordjs/collection": "^2.1.1",
-    "discord-api-types": "^0.37.117",
+    "discord-api-types": "^0.38.1",
     "discord-interactions": "^4.1.0",
     "itty-router": "^5.0.18"
   },
   "devDependencies": {
-    "wrangler": "^3.103.2"
+    "wrangler": "^4.13.0"
   },
   "repository": {
     "type": "git",

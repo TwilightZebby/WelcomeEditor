@@ -3,8 +3,6 @@ import { JsonResponse } from '../../../Utility/utilityMethods.js';
 import { ActionRowBuilder, ButtonBuilder } from '@discordjs/builders';
 import { localize } from '../../../Utility/localizeResponses.js';
 
-
-const SupportServerInvite = "https://discord.gg/BdXQjkADgd";
 const GitHubLink = "https://github.com/TwilightZebby/WelcomeEditor/issues/new/choose";
 
 
@@ -86,7 +84,6 @@ export const SlashCommand = {
     async executeCommand(interaction, interactionUser, usedCommandName, ctx) {
         // Create Link Buttons
         const LinkActionRow = new ActionRowBuilder().addComponents([
-            new ButtonBuilder().setStyle(ButtonStyle.Link).setLabel(localize(interaction.locale, 'SUPPORT_COMMAND_BUTTON_SERVER_LABEL')).setURL(SupportServerInvite),
             new ButtonBuilder().setStyle(ButtonStyle.Link).setLabel(localize(interaction.locale, 'SUPPORT_COMMAND_BUTTON_GITHUB_LABEL')).setURL(GitHubLink)
         ]);
 

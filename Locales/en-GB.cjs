@@ -116,7 +116,6 @@ module.exports = {
 
 
     // ******* SUPPORT COMMAND
-    SUPPORT_COMMAND_RESPONSE: `Need help/support with using **Welcome Editor** App?\nFeel free to ask either in its Support Server, or on GitHub (both linked below).`,
-    SUPPORT_COMMAND_BUTTON_SERVER_LABEL: `Join Support Server`,
+    SUPPORT_COMMAND_RESPONSE: `Need help/support with using **Welcome Editor** App?\nFeel free to ask on GitHub, linked below.`,
     SUPPORT_COMMAND_BUTTON_GITHUB_LABEL: `Ask on GitHub`,
 }
