@@ -77,4 +77,4 @@ Remove a Channel from being shown on the Welcome Screen.
 ## Do you have a support Server for this App?
 > Used to, but not anymore. I guess if you really want a Discord Server to ask in, there's my [own personal Server](https://discord.gg/nM7fJ8ZqnK).
 > 
-> **Though I'd prefer if you used this the Issues or Discussions tabs here on GitHub if you need help with Welcome Editor.**
+> **Though I'd prefer if you used the Issues or Discussions tabs here on GitHub if you need help with Welcome Editor.**
