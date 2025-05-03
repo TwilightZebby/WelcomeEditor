@@ -1,5 +1,4 @@
-import { ApplicationCommandType, InteractionContextType, ApplicationIntegrationType, MessageFlags, InteractionResponseType, ApplicationCommandOptionType, PermissionFlagsBits, ChannelType } from 'discord-api-types/v10';
-import { ActionRowBuilder, EmbedBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from '@discordjs/builders';
+import { ApplicationCommandType, InteractionContextType, ApplicationIntegrationType, MessageFlags, InteractionResponseType, ApplicationCommandOptionType, PermissionFlagsBits, ChannelType, ComponentType, SeparatorSpacingSize } from 'discord-api-types/v10';
 import { localize } from '../../../Utility/localizeResponses.js';
 import { JsonResponse } from '../../../Utility/utilityMethods.js';
 import { InteractionResponseHeaders } from '../../../Utility/utilityConstants.js';
@@ -537,39 +536,78 @@ async function previewWelcome(interaction, interactionUser) {
     }
 
     const welcomeData = await screenRequest.json();
-    // Format into Embed for readability
-    const previewEmbed = new EmbedBuilder().setDescription(localize(interaction.locale, 'WELCOME_COMMAND_PREVIEW_EMPTY_PLACEHOLDER'));
-
-    if ( welcomeData["description"] != null ) { previewEmbed.setDescription(welcomeData["description"]); }
-    
-    if ( welcomeData["welcome_channels"].length > 0 ) {
-        let channelStringArray = [];    
-
-        welcomeData["welcome_channels"].forEach(channel => {
-            let tempEmoji = "";
-
-            // Emoji
-            if ( channel["emoji_name"] != null && channel["emoji_id"] == null ) { tempEmoji = channel["emoji_name"]; }
-            else if ( channel["emoji_name"] != null && channel["emoji_id"] != null ) { tempEmoji = `<:${channel["emoji_name"]}:${channel["emoji_id"]}>`; }
-            
-            channelStringArray.push(`${tempEmoji} <#${channel["channel_id"]}>\n> ${channel["description"]}`);
-        });
-
-        previewEmbed.addFields({ name: localize(interaction.locale, 'WELCOME_COMMAND_PREVIEW_EMBED_CHANNELS_HEADER'), value: channelStringArray.join(`\n\n`) });
-    }
+    // Format into Components for readability
+    /** @type {import('discord-api-types/v10').APIMessageTopLevelComponent} */
+    const previewComponent = {
+        "id": 1,
+        "type": ComponentType.Container,
+        "spoiler": false,
+        "components": []
+    };
 
     // Welcome Screen enabled status
     let welcomeScreenEnabledStatus = "";
     if ( fetchedGuild["features"].includes("WELCOME_SCREEN_ENABLED") ) { welcomeScreenEnabledStatus = localize(interaction.locale, 'WELCOME_COMMAND_PREVIEW_ENABLED'); }
     else { welcomeScreenEnabledStatus = localize(interaction.locale, 'WELCOME_COMMAND_PREVIEW_DISABLED'); }
 
+    previewComponent.components.push(
+        {
+            "id": 2,
+            "type": ComponentType.TextDisplay,
+            "content": `${localize(interaction.locale, 'WELCOME_COMMAND_PREVIEW_INTRODUCTION', welcomeScreenEnabledStatus)}`
+        },
+        {
+            "id": 3,
+            "type": ComponentType.Separator,
+            "divider": true,
+            "spacing": SeparatorSpacingSize.Small
+        }
+    );
+
+    // Welcome Screen Description preview
+    if ( welcomeData["description"] != null ) {
+        previewComponent.components.push({
+            "id": 4,
+            "type": ComponentType.TextDisplay,
+            "content": welcomeData["description"]
+        });
+    }
+    else {
+        previewComponent.components.push({
+            "id": 5,
+            "type": ComponentType.TextDisplay,
+            "content": localize(interaction.locale, 'WELCOME_COMMAND_PREVIEW_EMPTY_PLACEHOLDER')
+        });
+    }
+
+    // Welcome Screen Channel Listing preview
+    if ( welcomeData["welcome_channels"].length > 0 ) {
+        let channelStringArray = [];
+
+        welcomeData["welcome_channels"].forEach(channel => {
+            let tempEmoji = "";
+
+            // Handle emoji
+            if ( channel["emoji_name"] != null && channel["emoji_id"] == null ) { tempEmoji = channel["emoji_name"]; }
+            else if ( channel["emoji_name"] != null && channel["emoji_id"] != null ) { tempEmoji = `<:${channel["emoji_name"]}:${channel["emoji_id"]}>`; }
+
+            channelStringArray.push(`${tempEmoji} <#${channel["channel_id"]}>\n> ${channel["description"]}`);
+        });
+
+        previewComponent.components.push({
+            "id": 6,
+            "type": ComponentType.TextDisplay,
+            "content": `### ${localize(interaction.locale, 'WELCOME_COMMAND_PREVIEW_EMBED_CHANNELS_HEADER')}\n${channelStringArray.join(`\n\n`)}`
+        });
+    }
+
+
     // ACK
     return new JsonResponse({
         type: InteractionResponseType.ChannelMessageWithSource,
         data: {
-            content: localize(interaction.locale, 'WELCOME_COMMAND_PREVIEW_INTRODUCTION', welcomeScreenEnabledStatus),
-            embeds: [previewEmbed],
-            flags: MessageFlags.Ephemeral
+            components: [previewComponent],
+            flags: MessageFlags.Ephemeral | MessageFlags.IsComponentsV2
         }
     });
 }

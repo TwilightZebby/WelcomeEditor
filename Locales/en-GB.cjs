@@ -66,7 +66,7 @@ module.exports = {
     
     WELCOME_COMMAND_PREVIEW_EMPTY_PLACEHOLDER: `-# *There is nothing in this Server's Welcome Screen...*`,
     WELCOME_COMMAND_PREVIEW_EMBED_CHANNELS_HEADER: `Welcome Channels:`,
-    WELCOME_COMMAND_PREVIEW_INTRODUCTION: `## __Welcome Screen Preview__\nBelow is a preview of this Server's current Welcome Screen.\nYou can make changes to it using the \`/welcome edit\` Subcommands.\n\nThis Server's Welcome Screen is currently: **{{0}}**\n\n-# *Can't see the preview? Make sure you have Embeds enabled in **User Settings -> Chat -> "Show embeds and preview website links"***`,
+    WELCOME_COMMAND_PREVIEW_INTRODUCTION: `## __Welcome Screen Preview__\nBelow is a preview of this Server's current Welcome Screen.\nYou can make changes to it using the \`/welcome edit\` Subcommands.\n\nThis Server's Welcome Screen is currently: **{{0}}**`,
     WELCOME_COMMAND_PREVIEW_ENABLED: `Enabled`,
     WELCOME_COMMAND_PREVIEW_DISABLED: `Disabled`,
 
