@@ -78,7 +78,7 @@ export const SlashCommand = {
                             type: ApplicationCommandOptionType.String,
                             name: "description",
                             description: "The new description you want to set",
-                            max_length: 150,
+                            max_length: 140,
                             required: true
                         }]
                     },
