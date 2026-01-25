@@ -18,14 +18,14 @@
   "author": "TwilightZebby",
   "license": "SEE LICENSE IN https://github.com/TwilightZebby/license/blob/main/license.md",
   "dependencies": {
-    "@discordjs/builders": "^1.11.2",
+    "@discordjs/builders": "^1.13.1",
     "@discordjs/collection": "^2.1.1",
-    "discord-api-types": "^0.38.13",
-    "discord-interactions": "^4.3.0",
-    "itty-router": "^5.0.18"
+    "discord-api-types": "^0.38.37",
+    "discord-interactions": "^4.4.0",
+    "itty-router": "^5.0.22"
   },
   "devDependencies": {
-    "wrangler": "^4.59.1"
+    "wrangler": "^4.60.0"
   },
   "repository": {
     "type": "git",
