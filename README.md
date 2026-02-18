@@ -17,6 +17,8 @@ Changelog/Patch Notes are [found here](https://github.com/TwilightZebby/WelcomeE
 
 If you need help/support, feel free to ask [here on GitHub](https://github.com/TwilightZebby/WelcomeEditor/issues/new/choose).
 
+Want to share a link to Welcome Editor? Feel free to copy [this link to its Discord App Directory page](https://discord.com/discovery/applications/1295097376712687759) - which doesn't require signing into Discord to view it!
+
 ---
 
 # Commands

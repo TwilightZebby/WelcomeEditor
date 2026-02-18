@@ -5,3 +5,6 @@ contact_links:
   - name: Add App
     url: https://discord.com/oauth2/authorize?client_id=1295097376712687759
     about: Want to add Welcome Editor to your own Server? Use this link here!
+  - name: View on App Directory
+    url: https://discord.com/discovery/applications/1295097376712687759
+    about: View Welcome Editor on Discord's App Directory without signing into Discord!
