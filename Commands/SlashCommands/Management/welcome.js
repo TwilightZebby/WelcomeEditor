@@ -1,8 +1,11 @@
 import { ApplicationCommandType, InteractionContextType, ApplicationIntegrationType, MessageFlags, InteractionResponseType, ApplicationCommandOptionType, PermissionFlagsBits, ChannelType, ComponentType, SeparatorSpacingSize } from 'discord-api-types/v10';
+import emojiRegex from 'emoji-regex';
 import { localize } from '../../../Utility/localizeResponses.js';
 import { JsonResponse } from '../../../Utility/utilityMethods.js';
-import { InteractionResponseHeaders } from '../../../Utility/utilityConstants.js';
+import { CustomRegEx, InteractionResponseHeaders } from '../../../Utility/utilityConstants.js';
+import { DISCORD_TOKEN } from '../../../config.js';
 
+const UnicodeEmojiRegex = emojiRegex();
 
 export const SlashCommand = {
     /** Command's Name, in fulllowercase (can include hyphens)
@@ -98,13 +101,13 @@ export const SlashCommand = {
                             description: "A label or description for the selected Channel",
                             max_length: 50,
                             required: true
-                        }, /* {
+                        }, {
                             type: ApplicationCommandOptionType.String,
                             name: "emoji",
                             description: "[OPTIONAL] An emoji, default or custom, to be displayed with the selected Channel",
                             max_length: 100,
                             required: false
-                        } */]
+                        }]
                     },
                     {
                         type: ApplicationCommandOptionType.Subcommand,
@@ -121,14 +124,14 @@ export const SlashCommand = {
                             name: "label",
                             description: "A new label or description for the selected Channel",
                             max_length: 50,
-                            required: true
-                        }, /* {
+                            required: false
+                        }, {
                             type: ApplicationCommandOptionType.String,
                             name: "emoji",
-                            description: "[OPTIONAL] A new emoji, default or custom, to be displayed with the selected Channel",
+                            description: "A new emoji, default or custom, to be displayed with the selected Channel",
                             max_length: 100,
                             required: false
-                        } */]
+                        }]
                     },
                     {
                         type: ApplicationCommandOptionType.Subcommand,
@@ -664,6 +667,7 @@ async function addChannel(interaction, subcommand, welcomeData) {
     // Grab inputs
     const InputChannel = subcommand.options.find(option => option.type === ApplicationCommandOptionType.Channel);
     const InputLabel = subcommand.options.find(option => option.type === ApplicationCommandOptionType.String && option.name === "label");
+    const InputEmoji = subcommand.options.find(option => option.type === ApplicationCommandOptionType.String && option.name === "emoji");
 
     // If there are already five, reject!
     if ( welcomeData["welcome_channels"].length === 5 ) {
@@ -676,8 +680,40 @@ async function addChannel(interaction, subcommand, welcomeData) {
         });
     }
 
+    // Validate Emoji, if one was inputted
+    let inputEmojiName = null;
+    let inputEmojiId = undefined;
+
+    if ( InputEmoji != undefined && InputEmoji.value.length > 0 ) {
+        // Validate an emoji, either custom or unicode, was given
+        if ( CustomRegEx.DiscordEmoji.test(InputEmoji.value)  ) {
+            let tempEmojiMatch = InputEmoji.value.match(CustomRegEx.DiscordEmoji).shift();
+            tempEmojiMatch = tempEmojiMatch.replace("<", "").replace(">", "");
+            let tempEmojiSplit = tempEmojiMatch.split(":");
+            let tempEmojiName = tempEmojiSplit[1];
+            let tempEmojiId = tempEmojiSplit[2];
+
+            // Validate the custom emoji is from this Discord Guild, and not an external Guild
+            let requestGetEmoji = await fetch(`https://discord.com/api/v10/guilds/${interaction.guild_id}/emojis/${tempEmojiId}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bot ${DISCORD_TOKEN}`
+                }
+            });
+            
+            if ( requestGetEmoji.status === 200 ) {
+                inputEmojiName = tempEmojiName;
+                inputEmojiId = tempEmojiId;
+            }
+        }
+        else if ( UnicodeEmojiRegex.test(InputEmoji.value) ) {
+            let tempEmojiMatch = InputEmoji.value.match(UnicodeEmojiRegex).shift();
+            inputEmojiName = tempEmojiMatch;
+        }
+    }
+
     // Assemble into the correct Object format
-    let newChannel = { "channel_id": InputChannel.value, description: InputLabel.value };
+    let newChannel = { "channel_id": InputChannel.value, description: InputLabel.value, "emoji_id": inputEmojiId, "emoji_name": inputEmojiName };
 
     // Patch into current data (reject if duplicate is found)
     let updatedData = welcomeData["welcome_channels"];
@@ -735,6 +771,7 @@ async function editChannel(interaction, subcommand, welcomeData) {
     // Grab inputs
     const InputChannel = subcommand.options.find(option => option.type === ApplicationCommandOptionType.Channel);
     const InputLabel = subcommand.options.find(option => option.type === ApplicationCommandOptionType.String && option.name === "label");
+    const InputEmoji = subcommand.options.find(option => option.type === ApplicationCommandOptionType.String && option.name === "emoji");
 
     // Patch into current data (reject if no Channel is found)
     let updatedData = welcomeData["welcome_channels"];
@@ -751,7 +788,52 @@ async function editChannel(interaction, subcommand, welcomeData) {
         });
     }
 
-    updatedData[checkIndex]["description"] = InputLabel.value;
+    // Validate an input was given!
+    if ( InputEmoji == undefined && InputLabel == undefined ) {
+        return new JsonResponse({
+            type: InteractionResponseType.ChannelMessageWithSource,
+            data: {
+                content: localize(interaction.locale, 'WELCOME_EDIT_EDIT_CHANNEL_ERROR_NO_CHANGES_MADE', InputChannel.value),
+                flags: MessageFlags.Ephemeral
+            }
+        });
+    }
+
+    // Validate Emoji, if one was inputted
+    let inputEmojiName = null;
+    let inputEmojiId = undefined;
+
+    if ( InputEmoji != undefined && InputEmoji.value.length > 0 ) {
+        // Validate an emoji, either custom or unicode, was given
+        if ( CustomRegEx.DiscordEmoji.test(InputEmoji.value)  ) {
+            let tempEmojiMatch = InputEmoji.value.match(CustomRegEx.DiscordEmoji).shift();
+            tempEmojiMatch = tempEmojiMatch.replace("<", "").replace(">", "");
+            let tempEmojiSplit = tempEmojiMatch.split(":");
+            let tempEmojiName = tempEmojiSplit[1];
+            let tempEmojiId = tempEmojiSplit[2];
+
+            // Validate the custom emoji is from this Discord Guild, and not an external Guild
+            let requestGetEmoji = await fetch(`https://discord.com/api/v10/guilds/${interaction.guild_id}/emojis/${tempEmojiId}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bot ${DISCORD_TOKEN}`
+                }
+            });
+            
+            if ( requestGetEmoji.status === 200 ) {
+                inputEmojiName = tempEmojiName;
+                inputEmojiId = tempEmojiId;
+            }
+        }
+        else if ( UnicodeEmojiRegex.test(InputEmoji.value) ) {
+            let tempEmojiMatch = InputEmoji.value.match(UnicodeEmojiRegex).shift();
+            inputEmojiName = tempEmojiMatch;
+        }
+    }
+
+    if ( InputLabel != undefined ) { updatedData[checkIndex]["description"] = InputLabel.value; }
+    if ( inputEmojiName != null ) { updatedData[checkIndex]["emoji_name"] = inputEmojiName; }
+    if ( inputEmojiId != undefined ) { updatedData[checkIndex]["emoji_id"] = inputEmojiId; }
     let requestBody = JSON.stringify({ "welcome_channels": updatedData });
 
     // Send patch

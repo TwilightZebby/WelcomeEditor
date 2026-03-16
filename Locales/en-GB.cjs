@@ -103,6 +103,7 @@ module.exports = {
     WELCOME_EDIT_EDIT_CHANNEL_SUCCESS: `Successfully edited the <#{{0}}> Channel's listing on this Server's Welcome Screen.`,
     WELCOME_EDIT_EDIT_CHANNEL_ERROR_NOT_FOUND: `The <#{{0}}> Channel was not found on this Server's Welcome Screen.`,
     WELCOME_EDIT_EDIT_CHANNEL_ERROR_GENERIC: `Sorry, an error occurred while trying to edit the <#{{0}}> Channel's listing on this Server's Welcome Screen.`,
+    WELCOME_EDIT_EDIT_CHANNEL_ERROR_NO_CHANGES_MADE: `Whoops, I cannot edit <#{{0}}>'s Channel listing if you don't provide either a new description or emoji (or both) for it!`,
 
     WELCOME_EDIT_REMOVE_CHANNEL_SUCCESS: `Successfully removed the <#{{0}}> Channel from this Server's Welcome Screen.`,
     WELCOME_EDIT_REMOVE_CHANNEL_ERROR_NOT_FOUND: `The <#{{0}}> Channel was not found on this Server's Welcome Screen.`,

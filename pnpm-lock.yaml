@@ -24,6 +24,9 @@ importers:
       discord-interactions:
         specifier: ^4.4.0
         version: 4.4.0
+      emoji-regex:
+        specifier: ^10.6.0
+        version: 10.6.0
       itty-router:
         specifier: ^5.0.23
         version: 5.0.23
@@ -441,6 +444,9 @@ packages:
     resolution: {integrity: sha512-jjJx8iwAeJcj8oEauV43fue9lNqkf38fy60aSs2+G8D1nJmDxUIrk08o3h0F3wgwuBWWJUZO+X/VgfXsxpCiJA==, tarball: https://registry.npmjs.org/discord-interactions/-/discord-interactions-4.4.0.tgz}
     engines: {node: '>=18.4.0'}
 
+  emoji-regex@10.6.0:
+    resolution: {integrity: sha512-toUI84YS5YmxW219erniWD0CIVOo46xGKColeNQRgOzDorgBi1v4D71/OFzgD9GO2UGKIv1C3Sp8DAn0+j5w7A==, tarball: https://registry.npmjs.org/emoji-regex/-/emoji-regex-10.6.0.tgz}
+
   error-stack-parser-es@1.0.5:
     resolution: {integrity: sha512-5qucVt2XcuGMcEGgWI7i+yZpmpByQ8J1lHhcL7PwqCwu9FPP3VUXzT4ltHe5i2z9dePwEHcDVOAfSnHsOlCXRA==, tarball: https://registry.npmjs.org/error-stack-parser-es/-/error-stack-parser-es-1.0.5.tgz}
 
@@ -804,6 +810,8 @@ snapshots:
   discord-api-types@0.38.42: {}
 
   discord-interactions@4.4.0: {}
+
+  emoji-regex@10.6.0: {}
 
   error-stack-parser-es@1.0.5: {}
 

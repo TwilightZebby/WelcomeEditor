@@ -5,6 +5,10 @@ import { DISCORD_APP_USER_ID, DISCORD_TOKEN } from '../config.js';
 // *******************************
 //  Exports
 
+export const CustomRegEx = {
+    DiscordEmoji: new RegExp(/<a?:(?<name>[a-zA-Z0-9\_]+):(?<id>\d{15,21})>/)
+};
+
 /** Utility & Command/Interaction Collections */
 export const UtilityCollections = {
     /** Holds all Cooldowns for Slash Commands, mapped by "commandName_userID"
