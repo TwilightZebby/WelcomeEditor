@@ -20,12 +20,12 @@
   "dependencies": {
     "@discordjs/builders": "^1.13.1",
     "@discordjs/collection": "^2.1.1",
-    "discord-api-types": "^0.38.39",
+    "discord-api-types": "^0.38.42",
     "discord-interactions": "^4.4.0",
-    "itty-router": "^5.0.22"
+    "itty-router": "^5.0.23"
   },
   "devDependencies": {
-    "wrangler": "^4.66.0"
+    "wrangler": "^4.74.0"
   },
   "repository": {
     "type": "git",
